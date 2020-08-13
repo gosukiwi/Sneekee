@@ -22,7 +22,7 @@ function CreditsScene_Update(delta as float)
   SetSpritePosition(creditsScene.credits.sprite, GetSpriteX(creditsScene.credits.sprite), GetSpriteY(creditsScene.credits.sprite) - CREDITS_SPEED * delta)
   SetSpritePosition(creditsScene.logo.sprite, GetSpriteX(creditsScene.logo.sprite), GetSpriteY(creditsScene.logo.sprite) - CREDITS_SPEED * delta)
 
-  if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER) or GetRawKeyPressed(KEY_SPACE) or GetRawMouseLeftPressed()
+  if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
     CreditsScene_Destroy() // TODO: can we do this in current scene? destroy currrent?
     SetCurrentScene(SCENES_MAIN_MENU_SCENE)
   endif
