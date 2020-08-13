@@ -1,0 +1,2 @@
+projectile1.png:0:0:3:3
+projectile2.png:3:0:3:3

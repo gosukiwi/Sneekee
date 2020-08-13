@@ -1,0 +1,2 @@
+button1.png:0:0:6:3
+button2.png:6:0:6:3

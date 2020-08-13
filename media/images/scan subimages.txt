@@ -1,0 +1,6 @@
+scan1.png:0:0:12:12
+scan2.png:12:0:12:12
+scan3.png:24:0:12:12
+scan4.png:36:0:12:12
+scan5.png:48:0:12:12
+scan6.png:60:0:12:12

@@ -1,0 +1,5 @@
+enemy1.png:0:0:7:6
+enemy2.png:0:6:7:6
+enemy3.png:0:12:7:6
+enemy4.png:0:18:7:6
+enemy5.png:0:24:7:6

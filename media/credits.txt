@@ -1,0 +1,10 @@
+CODING: Federico Ramirez
+@gosukiwi
+
+PIXEL ART: Federico Ramirez
+@gosukiwi
+
+MUSIC: sawsquarenoise
+freemusicarchive.org
+
+PLATFORM: AppGameKit + Atom

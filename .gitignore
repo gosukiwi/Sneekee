@@ -1,0 +1,8 @@
+*.exe
+*.byc
+*.dll
+HTML5/
+tmp/
+tags
+tags.lock
+tags.temp
