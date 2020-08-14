@@ -5,24 +5,19 @@ endtype
 
 function BlinkTween_Create(sprite as integer)
   blink as tBlinkTween
-
-  tween1 = CreateTweenSprite(0.5)
-  SetTweenSpriteAlpha(tween1, 255, 128, 0)
-  tween2 = CreateTweenSprite(0.5)
-  SetTweenSpriteAlpha(tween2, 128, 255, 0)
-  tween3 = CreateTweenSprite(0.5)
-  SetTweenSpriteAlpha(tween3, 255, 128, 0)
-  tween4 = CreateTweenSprite(0.5)
-  SetTweenSpriteAlpha(tween4, 128, 255, 0)
-  blink.tweens.insert(tween1)
-  blink.tweens.insert(tween2)
-  blink.tweens.insert(tween3)
-  blink.tweens.insert(tween4)
-
   chain = CreateTweenChain()
-  for i = 0 to blink.tweens.length
-    AddTweenChainSprite(chain, blink.tweens[i], sprite, 0)
+
+  for i = 0 to 10
+    tween = CreateTweenSprite(0.2)
+    if Mod(i, 2) = 0
+      SetTweenSpriteAlpha(tween, 128, 255, 0)
+    else
+      SetTweenSpriteAlpha(tween, 255, 128, 0)
+    endif
+    blink.tweens.insert(tween)
+    AddTweenChainSprite(chain, tween, sprite, 0)
   next i
+
   blink.chain = chain
 endfunction blink
 
