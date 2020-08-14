@@ -67,6 +67,7 @@ endfunction
 // LEVELS
 // =============================================================================
 function GameScene_CreateLevel1()
+  g.lives = PLAYER_INITIAL_LIVES
   scene as tGameScene
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
@@ -178,7 +179,7 @@ function GameScene_CheckBullets(scene ref as tGameScene)
           HeartsHud_Pop(scene.hud)
           Player_Blink(scene.player)
           g.lives = g.lives - 1
-          if g.lives = 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
+          if g.lives <= 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
         endif
       endif
     until GetSpriteNextContact() = 0
