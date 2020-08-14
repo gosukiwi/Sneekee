@@ -2,7 +2,6 @@
 
 type tGameScene
   player as tPlayer
-  lives as integer
   enemies as tEnemy[]
   map as tMap
   alarm as integer
@@ -65,15 +64,16 @@ endfunction
 
 // PRIVATE
 // =============================================================================
+// LEVELS
+// =============================================================================
 function GameScene_CreateLevel1()
   scene as tGameScene
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create()
+  scene.hud = HeartsHud_Create(g.lives)
   scene.button = GameScene_CreateNextLevelButton()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
-  scene.lives = PLAYER_INITIAL_LIVES // TODO: Set as current lives global
   scene.alarm = 0
   scene.alarmPlaying = 0
   scene.enemies.insert(Enemy_Create(125, 106))
@@ -87,14 +87,14 @@ function GameScene_CreateLevel2()
   scene.map = Map_Create("maps/map-2.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create()
+  scene.hud = HeartsHud_Create(g.lives)
   scene.button = GameScene_CreateNextLevelButton()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
-  scene.lives = PLAYER_INITIAL_LIVES // TODO: Set as current lives global
   scene.alarm = 0
   scene.alarmPlaying = 0
   scene.enemies.insert(Enemy_Create(25, 106))
 endfunction scene
+// =============================================================================
 
 function GameScene_CreateNextLevelButton()
   image = LoadImage("images/button.png")
@@ -177,8 +177,8 @@ function GameScene_CheckBullets(scene ref as tGameScene)
 
           HeartsHud_Pop(scene.hud)
           Player_Blink(scene.player)
-          scene.lives = scene.lives - 1
-          if scene.lives = 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
+          g.lives = g.lives - 1
+          if g.lives = 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
         endif
       endif
     until GetSpriteNextContact() = 0

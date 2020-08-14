@@ -34,12 +34,14 @@ type tState
   soundManager as tSoundManager
   explosionManager as tExplosionManager
   sceneManager as tSceneManager
+  lives as integer
 endtype
-global g as tState
 
+global g as tState
 g.explosionManager = ExplosionManager_Create()
 g.soundManager = SoundManager_Create()
 g.sceneManager = SceneManager_Create()
+g.lives = PLAYER_INITIAL_LIVES
 SceneManager_SetCurrent(g.sceneManager, SCENES_MAIN_MENU_SCENE)
 LoadAllSounds()
 

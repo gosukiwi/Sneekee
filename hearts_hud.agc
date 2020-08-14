@@ -17,12 +17,12 @@ function HeartsHud_Pop(hud ref as tHeartsHud)
   hud.hearts.remove()
 endfunction
 
-function HeartsHud_Create()
+function HeartsHud_Create(lives as integer)
   hud as tHeartsHud
   hud.image = LoadImage("images/heart.png")
   SetImageMinFilter(hud.image, 0)
   SetImageMagFilter(hud.image, 0)
-  for i = 1 to PLAYER_INITIAL_LIVES
+  for i = 1 to lives
     hud.hearts.insert(HeartsHud_Push(hud))
   next i
 endfunction hud
