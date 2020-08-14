@@ -13,6 +13,8 @@ function HeartsHud_Push(hud ref as tHeartsHud)
 endfunction sprite
 
 function HeartsHud_Pop(hud ref as tHeartsHud)
+  if hud.hearts.length = -1 then exitfunction
+
   DeleteSprite(hud.hearts[hud.hearts.length])
   hud.hearts.remove()
 endfunction
