@@ -15,7 +15,7 @@ endfunction
 function GameOverScene_Update(delta as float)
   if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
     GameOverScene_Destroy()
-    SetCurrentScene(SCENES_MAIN_MENU_SCENE)
+    SetCurrentScene(g.sceneManager, SCENES_MAIN_MENU_SCENE)
   endif
 endfunction
 

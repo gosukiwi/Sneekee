@@ -33,15 +33,14 @@ SetScissor(0,0,0,0) // use the maximum available screen space, no black borders
 type tState
   soundManager as tSoundManager
   explosionManager as tExplosionManager
-  currentScene as integer // TODO: Move this to scene manager
-  currentGameScene as tGameScene
+  sceneManager as tSceneManager
 endtype
 global g as tState
 
 g.explosionManager = ExplosionManager_Create()
 g.soundManager = SoundManager_Create()
+g.sceneManager = SceneManager_Create(SCENES_MAIN_MENU_SCENE)
 LoadAllSounds()
-SetCurrentScene(SCENES_MAIN_MENU_SCENE)
 
 elapsed# = 0
 do
@@ -49,7 +48,7 @@ do
   delta# = newTime# - elapsed#
   elapsed# = newTime#
 
-  UpdateCurrentScene(delta#)
+  UpdateCurrentScene(g.sceneManager, delta#)
   ExplosionManager_Update(g.explosionManager)
 
   if DEBUGGING then Print(ScreenFPS())

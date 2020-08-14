@@ -19,7 +19,7 @@ endfunction
 function WinScene_Update(delta as float)
   if Timer() - winScene.started > WIN_SCENE_DURATION or GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
     WinScene_Destroy() // TODO: can we do this in current scene? destroy currrent?
-    SetCurrentScene(SCENES_CREDITS_SCENE)
+    SetCurrentScene(g.sceneManager, SCENES_CREDITS_SCENE)
   endif
 endfunction
 

@@ -7,29 +7,29 @@ type tCreditsScene
 endtype
 
 function CreditsScene_Create()
-  global creditsScene as tCreditsScene
-  creditsScene.music = LoadMusicOGG("music/gameover.ogg")
-  creditsScene.credits = SimpleSprite_Create("images/credits.png")
-  creditsScene.logo = SimpleSprite_Create("images/agk.png")
-  SetSpriteSize(creditsScene.credits.sprite, 64, 64)
-  SetSpriteSize(creditsScene.logo.sprite, 32, 32)
-  SetSpritePosition(creditsScene.logo.sprite, 32 - 16, 60)
+  scene as tCreditsScene
+  scene.music = LoadMusicOGG("music/gameover.ogg")
+  scene.credits = SimpleSprite_Create("images/credits.png")
+  scene.logo = SimpleSprite_Create("images/agk.png")
+  SetSpriteSize(scene.credits.sprite, 64, 64)
+  SetSpriteSize(scene.logo.sprite, 32, 32)
+  SetSpritePosition(scene.logo.sprite, 32 - 16, 60)
   SetMusicSystemVolumeOGG(MUSIC_VOLUME)
-  PlayMusicOGG(creditsScene.music, 1)
-endfunction
+  PlayMusicOGG(scene.music, 1)
+endfunction scene
 
-function CreditsScene_Update(delta as float)
-  SetSpritePosition(creditsScene.credits.sprite, GetSpriteX(creditsScene.credits.sprite), GetSpriteY(creditsScene.credits.sprite) - CREDITS_SPEED * delta)
-  SetSpritePosition(creditsScene.logo.sprite, GetSpriteX(creditsScene.logo.sprite), GetSpriteY(creditsScene.logo.sprite) - CREDITS_SPEED * delta)
+function CreditsScene_Update(scene ref as tCreditsScene, delta as float)
+  SetSpritePosition(scene.credits.sprite, GetSpriteX(scene.credits.sprite), GetSpriteY(scene.credits.sprite) - CREDITS_SPEED * delta)
+  SetSpritePosition(scene.logo.sprite, GetSpriteX(scene.logo.sprite), GetSpriteY(scene.logo.sprite) - CREDITS_SPEED * delta)
 
   if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
-    CreditsScene_Destroy() // TODO: can we do this in current scene? destroy currrent?
-    SetCurrentScene(SCENES_MAIN_MENU_SCENE)
+    CreditsScene_Destroy(scene) // TODO: can we do this in current scene? destroy currrent?
+    SetCurrentScene(g.sceneManager, SCENES_MAIN_MENU_SCENE)
   endif
 endfunction
 
-function CreditsScene_Destroy()
-  DeleteMusicOGG(creditsScene.music)
-  SimpleSprite_Destroy(creditsScene.credits)
-  SimpleSprite_Destroy(creditsScene.logo)
+function CreditsScene_Destroy(scene ref as tCreditsScene)
+  DeleteMusicOGG(scene.music)
+  SimpleSprite_Destroy(scene.credits)
+  SimpleSprite_Destroy(scene.logo)
 endfunction

@@ -14,13 +14,6 @@
 #constant DEPTH_MIDDLE       500
 #constant DEPTH_MIDDLE_BACK  750
 #constant DEPTH_BACK         1000
-// Scenes
-#constant SCENES_MAIN_MENU_SCENE 0
-#constant SCENES_GAME_SCENE      1
-#constant SCENES_LEVEL2          2
-#constant SCENES_WIN_SCENE       3
-#constant SCENES_GAME_OVER_SCENE 4
-#constant SCENES_CREDITS_SCENE   5
 // Other
 #constant PLAYER_INITIAL_LIVES 3
 #constant SOUND_VOLUME 40

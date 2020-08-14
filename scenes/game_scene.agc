@@ -39,10 +39,10 @@ function GameScene_Update(scene ref as tGameScene, delta#)
 
   if scene.mustIncreaseLevel
     GameScene_Destroy(scene)
-    g.currentGameScene = GameScene_Create(scene.level + 1)
-  elseif g.currentScene <> SCENES_GAME_SCENE
+    g.sceneManager.gameScene = GameScene_Create(scene.level + 1)
+  elseif g.sceneManager.current <> SCENES_GAME_SCENE
     GameScene_Destroy(scene)
-    CreateCurrentScene()
+    CreateCurrentScene(g.sceneManager)
   endif
 endfunction
 
@@ -137,7 +137,7 @@ function GameScene_UpdateNextLevelButton(scene ref as tGameScene)
     if GetSpriteCurrentFrame(scene.button) <> 2 then SetSpriteFrame(scene.button, 2)
     if scene.enemies.length = -1 // No more enemies!
       if scene.level = LAST_LEVEL
-        g.currentScene = SCENES_WIN_SCENE
+        g.sceneManager.current = SCENES_WIN_SCENE
       else
         scene.mustIncreaseLevel = 1
       endif
@@ -178,7 +178,7 @@ function GameScene_CheckBullets(scene ref as tGameScene)
           HeartsHud_Pop(scene.hud)
           Player_Blink(scene.player)
           scene.lives = scene.lives - 1
-          if scene.lives = 0 then g.currentScene = SCENES_GAME_OVER_SCENE
+          if scene.lives = 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
         endif
       endif
     until GetSpriteNextContact() = 0
