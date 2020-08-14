@@ -7,23 +7,23 @@ type tWinScene
 endtype
 
 function WinScene_Create()
-  global winScene as tWinScene
-  winScene.music = LoadMusicOGG("music/menu.ogg")
-  winScene.sprite = SimpleSprite_Create("images/win.png")
-  winScene.started = Timer()
-  SetSpriteSize(winScene.sprite.sprite, 64, 64)
+  scene as tWinScene
+  scene.music = LoadMusicOGG("music/menu.ogg")
+  scene.sprite = SimpleSprite_Create("images/win.png")
+  scene.started = Timer()
+  SetSpriteSize(scene.sprite.sprite, 64, 64)
   SetMusicSystemVolumeOGG(MUSIC_VOLUME)
-  PlayMusicOGG(winScene.music, 1)
-endfunction
+  PlayMusicOGG(scene.music, 1)
+endfunction scene
 
-function WinScene_Update(delta as float)
-  if Timer() - winScene.started > WIN_SCENE_DURATION or GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
-    WinScene_Destroy() // TODO: can we do this in current scene? destroy currrent?
+function WinScene_Update(scene ref as tWinScene, delta as float)
+  if Timer() - scene.started > WIN_SCENE_DURATION or GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
+    WinScene_Destroy(scene) // TODO: can we do this in current scene? destroy currrent?
     SetCurrentScene(g.sceneManager, SCENES_CREDITS_SCENE)
   endif
 endfunction
 
-function WinScene_Destroy()
-  DeleteMusicOGG(winScene.music)
-  SimpleSprite_Destroy(winScene.sprite)
+function WinScene_Destroy(scene ref as tWinScene)
+  DeleteMusicOGG(scene.music)
+  SimpleSprite_Destroy(scene.sprite)
 endfunction

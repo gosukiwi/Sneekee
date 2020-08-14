@@ -14,9 +14,8 @@ type tSceneManager
   current as integer
 endtype
 
-function SceneManager_Create(initial as integer)
+function SceneManager_Create()
   manager as tSceneManager
-  SetCurrentScene(manager, initial)
 endfunction manager
 
 function UpdateCurrentScene(manager ref as tSceneManager, delta#)
@@ -25,13 +24,13 @@ function UpdateCurrentScene(manager ref as tSceneManager, delta#)
       GameScene_Update(manager.gameScene, delta#)
     endcase
     case SCENES_MAIN_MENU_SCENE
-      MainMenuScene_Update(delta#)
+      MainMenuScene_Update(manager.mainMenuScene, delta#)
     endcase
     case SCENES_WIN_SCENE
-      WinScene_Update(delta#)
+      WinScene_Update(manager.winScene, delta#)
     endcase
     case SCENES_GAME_OVER_SCENE
-      GameOverScene_Update(delta#)
+      GameOverScene_Update(manager.gameOverScene, delta#)
     endcase
     case SCENES_CREDITS_SCENE
       CreditsScene_Update(manager.creditsScene, delta#)
@@ -45,16 +44,13 @@ function CreateCurrentScene(manager ref as tSceneManager)
       manager.gameScene = GameScene_Create(1)
     endcase
     case SCENES_MAIN_MENU_SCENE
-      // manager.mainMenuScene = MainMenuScene_Create()
-      MainMenuScene_Create()
+      manager.mainMenuScene = MainMenuScene_Create()
     endcase
     case SCENES_WIN_SCENE
-      // manager.winScene = WinScene_Create()
-      WinScene_Create()
+      manager.winScene = WinScene_Create()
     endcase
     case SCENES_GAME_OVER_SCENE
-      // manager.gameOverScene = GameOverScene_Create()
-      GameOverScene_Create()
+      manager.gameOverScene = GameOverScene_Create()
     endcase
     case SCENES_CREDITS_SCENE
       manager.creditsScene = CreditsScene_Create()

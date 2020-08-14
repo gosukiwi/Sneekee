@@ -39,7 +39,8 @@ global g as tState
 
 g.explosionManager = ExplosionManager_Create()
 g.soundManager = SoundManager_Create()
-g.sceneManager = SceneManager_Create(SCENES_MAIN_MENU_SCENE)
+g.sceneManager = SceneManager_Create()
+SetCurrentScene(g.sceneManager, SCENES_MAIN_MENU_SCENE)
 LoadAllSounds()
 
 elapsed# = 0

@@ -68,36 +68,36 @@ function MainMenuScene_Create()
   // chevron = CreateSprite(chevronImage)
   // SetSpritePosition(chevron, 15, 32)
 
-  global mainMenuScene as tMainMenuScene
-  mainMenuScene.bgImage = image
-  mainMenuScene.bgSprite = sprite
-  mainMenuScene.playButton = playButton
-  mainMenuScene.creditsButton = creditsButton
-  mainMenuScene.exitButton = exitButton
-  mainMenuScene.music = LoadMusicOGG("music/menu.ogg")
+  scene as tMainMenuScene
+  scene.bgImage = image
+  scene.bgSprite = sprite
+  scene.playButton = playButton
+  scene.creditsButton = creditsButton
+  scene.exitButton = exitButton
+  scene.music = LoadMusicOGG("music/menu.ogg")
   SetMusicSystemVolumeOGG(MUSIC_VOLUME)
-  PlayMusicOGG(mainMenuScene.music, 1)
-endfunction
+  PlayMusicOGG(scene.music, 1)
+endfunction scene
 
-function MainMenuScene_Destroy()
-  DeleteSprite(mainMenuScene.bgSprite)
-  DeleteImage(mainMenuScene.bgImage)
-  MainMenuButton_Destroy(mainmenuScene.playButton)
-  MainMenuButton_Destroy(mainmenuScene.creditsButton)
-  MainMenuButton_Destroy(mainmenuScene.exitButton)
-  DeleteMusicOGG(mainMenuScene.music)
-endfunction
-
-function MainMenuScene_Update(delta as float)
+function MainMenuScene_Update(scene ref as tMainMenuScene, delta as float)
   if GetVirtualButtonPressed(MAIN_MENU_PLAY_BUTTON) or GetRawKeyPressed(KEY_ENTER) or GetRawKeyPressed(KEY_SPACE)
-    MainMenuScene_Destroy()
+    MainMenuScene_Destroy(scene)
     SetCurrentScene(g.sceneManager, SCENES_GAME_SCENE)
   elseif GetVirtualButtonPressed(MAIN_MENU_CREDITS_BUTTON)
-    MainMenuScene_Destroy()
+    MainMenuScene_Destroy(scene)
     SetCurrentScene(g.sceneManager, SCENES_CREDITS_SCENE)
   elseif GetVirtualButtonPressed(MAIN_MENU_EXIT_BUTTON) or GetRawKeyPressed(KEY_ESCAPE)
     end
   endif
+endfunction
+
+function MainMenuScene_Destroy(scene ref as tMainMenuScene)
+  DeleteSprite(scene.bgSprite)
+  DeleteImage(scene.bgImage)
+  MainMenuButton_Destroy(scene.playButton)
+  MainMenuButton_Destroy(scene.creditsButton)
+  MainMenuButton_Destroy(scene.exitButton)
+  DeleteMusicOGG(scene.music)
 endfunction
 
 // PRIVATE
