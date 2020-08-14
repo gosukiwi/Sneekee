@@ -42,7 +42,7 @@ function GameScene_Update(scene ref as tGameScene, delta#)
     g.sceneManager.gameScene = GameScene_Create(scene.level + 1)
   elseif g.sceneManager.current <> SCENES_GAME_SCENE
     GameScene_Destroy(scene)
-    CreateCurrentScene(g.sceneManager)
+    SceneManager_CreateCurrent(g.sceneManager)
   endif
 endfunction
 

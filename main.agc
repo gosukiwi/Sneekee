@@ -40,7 +40,7 @@ global g as tState
 g.explosionManager = ExplosionManager_Create()
 g.soundManager = SoundManager_Create()
 g.sceneManager = SceneManager_Create()
-SetCurrentScene(g.sceneManager, SCENES_MAIN_MENU_SCENE)
+SceneManager_SetCurrent(g.sceneManager, SCENES_MAIN_MENU_SCENE)
 LoadAllSounds()
 
 elapsed# = 0
@@ -49,7 +49,7 @@ do
   delta# = newTime# - elapsed#
   elapsed# = newTime#
 
-  UpdateCurrentScene(g.sceneManager, delta#)
+  SceneManager_UpdateCurrent(g.sceneManager, delta#)
   ExplosionManager_Update(g.explosionManager)
 
   if DEBUGGING then Print(ScreenFPS())

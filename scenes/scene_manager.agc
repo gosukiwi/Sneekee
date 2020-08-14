@@ -16,29 +16,10 @@ endtype
 
 function SceneManager_Create()
   manager as tSceneManager
+  manager.current = -1
 endfunction manager
 
-function UpdateCurrentScene(manager ref as tSceneManager, delta#)
-  select manager.current
-    case SCENES_GAME_SCENE
-      GameScene_Update(manager.gameScene, delta#)
-    endcase
-    case SCENES_MAIN_MENU_SCENE
-      MainMenuScene_Update(manager.mainMenuScene, delta#)
-    endcase
-    case SCENES_WIN_SCENE
-      WinScene_Update(manager.winScene, delta#)
-    endcase
-    case SCENES_GAME_OVER_SCENE
-      GameOverScene_Update(manager.gameOverScene, delta#)
-    endcase
-    case SCENES_CREDITS_SCENE
-      CreditsScene_Update(manager.creditsScene, delta#)
-    endcase
-  endselect
-endfunction
-
-function CreateCurrentScene(manager ref as tSceneManager)
+function SceneManager_CreateCurrent(manager ref as tSceneManager)
   select manager.current
     case SCENES_GAME_SCENE
       manager.gameScene = GameScene_Create(1)
@@ -58,7 +39,27 @@ function CreateCurrentScene(manager ref as tSceneManager)
   endselect
 endfunction
 
-function SetCurrentScene(manager ref as tSceneManager, scene as integer)
+function SceneManager_UpdateCurrent(manager ref as tSceneManager, delta#)
+  select manager.current
+    case SCENES_GAME_SCENE
+      GameScene_Update(manager.gameScene, delta#)
+    endcase
+    case SCENES_MAIN_MENU_SCENE
+      MainMenuScene_Update(manager.mainMenuScene, delta#)
+    endcase
+    case SCENES_WIN_SCENE
+      WinScene_Update(manager.winScene, delta#)
+    endcase
+    case SCENES_GAME_OVER_SCENE
+      GameOverScene_Update(manager.gameOverScene, delta#)
+    endcase
+    case SCENES_CREDITS_SCENE
+      CreditsScene_Update(manager.creditsScene, delta#)
+    endcase
+  endselect
+endfunction
+
+function SceneManager_SetCurrent(manager ref as tSceneManager, scene as integer)
   manager.current = scene
-  CreateCurrentScene(g.sceneManager) // TODO: Rename to `CreateScene(scene)`
+  SceneManager_CreateCurrent(g.sceneManager) // TODO: Rename to `CreateScene(scene)`
 endfunction

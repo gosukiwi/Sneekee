@@ -82,10 +82,10 @@ endfunction scene
 function MainMenuScene_Update(scene ref as tMainMenuScene, delta as float)
   if GetVirtualButtonPressed(MAIN_MENU_PLAY_BUTTON) or GetRawKeyPressed(KEY_ENTER) or GetRawKeyPressed(KEY_SPACE)
     MainMenuScene_Destroy(scene)
-    SetCurrentScene(g.sceneManager, SCENES_GAME_SCENE)
+    SceneManager_SetCurrent(g.sceneManager, SCENES_GAME_SCENE)
   elseif GetVirtualButtonPressed(MAIN_MENU_CREDITS_BUTTON)
     MainMenuScene_Destroy(scene)
-    SetCurrentScene(g.sceneManager, SCENES_CREDITS_SCENE)
+    SceneManager_SetCurrent(g.sceneManager, SCENES_CREDITS_SCENE)
   elseif GetVirtualButtonPressed(MAIN_MENU_EXIT_BUTTON) or GetRawKeyPressed(KEY_ESCAPE)
     end
   endif

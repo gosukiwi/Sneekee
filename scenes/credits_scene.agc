@@ -24,7 +24,7 @@ function CreditsScene_Update(scene ref as tCreditsScene, delta as float)
 
   if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
     CreditsScene_Destroy(scene) // TODO: can we do this in current scene? destroy currrent?
-    SetCurrentScene(g.sceneManager, SCENES_MAIN_MENU_SCENE)
+    SceneManager_SetCurrent(g.sceneManager, SCENES_MAIN_MENU_SCENE)
   endif
 endfunction
 
