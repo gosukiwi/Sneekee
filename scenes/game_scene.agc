@@ -34,7 +34,7 @@ function GameScene_Update(scene ref as tGameScene, delta#)
   GameScene_CheckBullets(scene)
   GameScene_UpdateNextLevelButton(scene)
   GameScene_PlayAlarmIfNeeded(scene)
-  CenterCameraOnSprite(scene)
+  CenterCameraOnPlayer(scene)
   GameScene_UpdateBackground(scene)
 
   if scene.mustIncreaseLevel
@@ -105,7 +105,7 @@ function GameScene_CreateNextLevelButton()
   SetSpritePosition(button, 145, 29)
 endfunction button
 
-function CenterCameraOnSprite(scene ref as tGameScene)
+function CenterCameraOnPlayer(scene ref as tGameScene)
 	spriteCenterX = GetSpriteX(scene.player.sprite) + GetSpriteOffsetX(scene.player.sprite)
 	spriteCenterY = GetSpriteY(scene.player.sprite) + GetSpriteOffsetY(scene.player.sprite)
 	screenWidth = GetVirtualWidth()

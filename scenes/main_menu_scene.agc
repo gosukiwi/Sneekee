@@ -62,7 +62,6 @@ function MainMenuScene_Create()
   SetVirtualButtonImageUp(MAIN_MENU_EXIT_BUTTON, exitButton.upImage)
   SetVirtualButtonImageDown(MAIN_MENU_EXIT_BUTTON, exitButton.downImage)
 
-
   // chevronImage = LoadImage("images/chevron.png")
   // SetImageMagFilter(chevronImage, 0)
   // SetImageMinFilter(chevronImage, 0)
