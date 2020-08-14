@@ -33,7 +33,8 @@ SetScissor(0,0,0,0) // use the maximum available screen space, no black borders
 type tState
   soundManager as tSoundManager
   explosionManager as tExplosionManager
-  currentScene as integer
+  currentScene as integer // TODO: Move this to scene manager
+  currentGameScene as tGameScene
 endtype
 global g as tState
 

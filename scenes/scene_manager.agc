@@ -1,7 +1,7 @@
 function UpdateCurrentScene(delta#)
   select g.currentScene
     case SCENES_GAME_SCENE
-      GameScene_Update(delta#)
+      GameScene_Update(g.currentGameScene, delta#)
     endcase
     case SCENES_MAIN_MENU_SCENE
       MainMenuScene_Update(delta#)
@@ -21,7 +21,7 @@ endfunction
 function CreateCurrentScene()
   select g.currentScene
     case SCENES_GAME_SCENE
-      GameScene_Create()
+      g.currentGameScene = GameScene_Create(1)
     endcase
     case SCENES_MAIN_MENU_SCENE
       MainMenuScene_Create()
