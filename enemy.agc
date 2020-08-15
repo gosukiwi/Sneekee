@@ -18,7 +18,7 @@ type tEnemy
   timer as float
   fireTimer as float
   projectileManager as tProjectileManager
-  lifeCollectableManager as tLifeCollectableManager
+  CollectableManager as tCollectableManager
   alive as integer
   dropsLife as integer
 endtype
@@ -61,7 +61,7 @@ function Enemy_Create(x, y, dropsLife)
   enemy.scan = scan
   enemy.scanDown = scanDown
   enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, ENEMY_PROJECTILE_LIFESPAN)
-  enemy.lifeCollectableManager = LifeCollectableManager_Create()
+  enemy.CollectableManager = CollectableManager_Create(SPRITE_LIVES_GROUP)
   enemy.timer = Timer()
   enemy.alive = 1
   enemy.dropsLife = dropsLife
@@ -127,7 +127,7 @@ function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"), SOUND_VOLUME)
   ProjectileManager_Destroy(enemy.projectileManager)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
-  if enemy.dropsLife then LifeCollectableManager_Add(enemy.lifeCollectableManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+  if enemy.dropsLife then CollectableManager_Add(enemy.CollectableManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
   DeleteSprite(enemy.sprite)
   DeleteSprite(enemy.scan)
   DeleteSprite(enemy.scanDown)

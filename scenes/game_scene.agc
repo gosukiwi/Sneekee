@@ -7,6 +7,7 @@ type tGameScene
   background as integer
   button as integer
   hud as tHeartsHud
+  shurihud as tShurikensHud
   music as integer
   level as integer
   mustIncreaseLevel as integer
@@ -31,6 +32,7 @@ endfunction scene
 
 function GameScene_Update(scene ref as tGameScene, delta#)
   Player_Update(scene.player, delta#)
+  GameScene_PollInput(scene)
   GameScene_UpdateEnemies(scene, delta#)
   GameScene_CheckPhysicsCollisions(scene)
   GameScene_UpdateNextLevelButton(scene)
@@ -70,11 +72,13 @@ endfunction
 // =============================================================================
 function GameScene_CreateLevel1()
   g.lives = PLAYER_INITIAL_LIVES
+  g.shurikens = PLAYER_INITIAL_SHURIKENS
   scene as tGameScene
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
+  scene.shurihud = ShurikensHud_Create(1)
   scene.button = GameScene_CreateNextLevelButton(145, 29)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
@@ -241,3 +245,11 @@ function GameScene_CreateMusic(file as string)
   SetMusicVolumeOGG(music, MUSIC_VOLUME)
   PlayMusicOGG(music, 1)
 endfunction music
+
+function GameScene_PollInput(scene ref as tGameScene)
+  if GetRawMouseRightPressed() and g.shurikens > 0
+    g.shurikens = g.shurikens - 1
+    ShurikensHud_Pop(scene.shurihud)
+    Player_ThrowShuriken(scene.player)
+  endif
+endfunction

@@ -26,6 +26,7 @@
 #constant DEPTH_BACK         1000
 // Other
 #constant PLAYER_INITIAL_LIVES 3
+#constant PLAYER_INITIAL_SHURIKENS 1
 #constant SOUND_VOLUME 40
 #constant MUSIC_VOLUME 30
 #constant NL Chr(10)

@@ -76,10 +76,10 @@ function Player_Update(player ref as tPlayer, delta#)
     until GetSpriteNextContact() = 0
   endif
 
-  if GetSpriteCollision(player.sprite, player.shuriken.sprite) and Shuriken_IsStill(player.shuriken) and player.hasShuriken = 0
-    Player_PickUpShuriken(player)
-    PlaySound(SoundManager_Get(g.soundManager, "shuriken-grabbed"), SOUND_VOLUME)
-  endif
+  // if GetSpriteCollision(player.sprite, player.shuriken.sprite) and Shuriken_IsStill(player.shuriken) and player.hasShuriken = 0
+  //   Player_PickUpShuriken(player)
+  //   PlaySound(SoundManager_Get(g.soundManager, "shuriken-grabbed"), SOUND_VOLUME)
+  // endif
 
   // Input
   Player_HandleInput(player)
@@ -113,6 +113,7 @@ function Player_Destroy(player ref as tPlayer)
   DeleteImage(player.image)
   BlinkTween_Destroy(player.blinkTween)
   ProjectileManager_Destroy(player.rocks)
+  Shuriken_Destroy(player.shuriken)
 endfunction
 
 function Player_IsInHurtboxFrame(player ref as tPlayer)
@@ -155,9 +156,6 @@ function Player_HandleInput(player ref as tPlayer)
       Player_PlayAttackingAnimation(player)
       PlaySound(SoundManager_Get(g.soundManager, "woosh"), SOUND_VOLUME)
     endif
-  elseif GetRawMouseRightPressed() and player.hasShuriken
-    player.hasShuriken = 0
-    Player_ThrowShuriken(player)
   endif
 
   if GetRawKeyPressed(KEY_CONTROL) and Timer() - player.rockPlacedAt > PLAYER_ROCK_ALIVE_TIME
