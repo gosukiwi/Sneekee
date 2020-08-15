@@ -7,6 +7,7 @@
 #constant SPRITE_ENEMY_GROUP            5
 #constant SPRITE_ENEMY_PROJECTILE_GROUP 6
 #constant SPRITE_ENEMY_SCAN             7
+#constant SPRITE_LIVES_GROUP            8
 #constant PHYSICS_PLAYER_CATEGORY %10
 #constant PHYSICS_PROJECTILE_COLLISION_BITS  %10 // collides with player only
 #constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11 // collides with player and everything else

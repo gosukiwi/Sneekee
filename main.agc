@@ -15,6 +15,7 @@
 #include "enemy.agc"
 #include "hearts_hud.agc"
 #include "blink_tween.agc"
+#include "life_collectable_manager.agc"
 #include "scenes/scene_manager.agc"
 #include "scenes/main_menu_scene.agc"
 #include "scenes/credits_scene.agc"
@@ -64,4 +65,5 @@ function LoadAllSounds()
   SoundManager_Register(g.soundManager, "jump", "sound/jump.ogg")
   SoundManager_Register(g.soundManager, "hit", "sound/hit.ogg")
   SoundManager_Register(g.soundManager, "alarm", "sound/alarm.ogg")
+  SoundManager_Register(g.soundManager, "lifeup", "sound/lifeup.ogg")
 endfunction

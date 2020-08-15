@@ -30,7 +30,7 @@ endfunction scene
 function GameScene_Update(scene ref as tGameScene, delta#)
   Player_Update(scene.player, delta#)
   GameScene_UpdateEnemies(scene, delta#)
-  GameScene_CheckBullets(scene)
+  GameScene_CheckPhysicsCollisions(scene)
   GameScene_UpdateNextLevelButton(scene)
   GameScene_PlayAlarmIfNeeded(scene)
   CenterCameraOnPlayer(scene)
@@ -77,10 +77,10 @@ function GameScene_CreateLevel1()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(125, 106))
-  scene.enemies.insert(Enemy_Create(75, 66))
-  scene.enemies.insert(Enemy_Create(125, 30))
-  scene.enemies.insert(Enemy_Create(50, 30))
+  scene.enemies.insert(Enemy_Create(125, 106, 1))
+  scene.enemies.insert(Enemy_Create(75, 66, 1))
+  scene.enemies.insert(Enemy_Create(125, 30, 1))
+  scene.enemies.insert(Enemy_Create(50, 30, 1))
 endfunction scene
 
 function GameScene_CreateLevel2()
@@ -93,9 +93,9 @@ function GameScene_CreateLevel2()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(25, 106))
-  scene.enemies.insert(Enemy_Create(96, 72))
-  scene.enemies.insert(Enemy_Create(72, 40))
+  scene.enemies.insert(Enemy_Create(25, 106, 1))
+  scene.enemies.insert(Enemy_Create(96, 72, 1))
+  scene.enemies.insert(Enemy_Create(72, 40, 1))
 endfunction scene
 // =============================================================================
 
@@ -164,7 +164,7 @@ function GameScene_UpdateBackground(scene ref as tGameScene)
   SetSpritePosition(scene.background, GetViewOffsetX() / 2, GetViewOffsetY() / 2)
 endfunction
 
-function GameScene_CheckBullets(scene ref as tGameScene)
+function GameScene_CheckPhysicsCollisions(scene ref as tGameScene)
   if GetSpriteFirstContact(scene.player.sprite) = 1
     repeat
       other = GetSpriteContactSpriteID2()
@@ -185,6 +185,11 @@ function GameScene_CheckBullets(scene ref as tGameScene)
             if g.lives <= 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
           endif
         endif
+      elseif group = SPRITE_LIVES_GROUP
+        DeleteSprite(other)
+        g.lives = g.lives + 1
+        HeartsHud_Push(scene.hud)
+        PlaySound(SoundManager_Get(g.soundManager, "lifeup"), SOUND_VOLUME)
       endif
     until GetSpriteNextContact() = 0
   endif

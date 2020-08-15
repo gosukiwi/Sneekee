@@ -2,7 +2,7 @@
 #constant ENEMY_STATE_MOVING_RIGHT   1
 #constant ENEMY_STATE_ATTACKING      2
 #constant ENEMY_STATE_SCANNING_DOWN  3
-#constant ENEMY_SCAN_TIME            2 // seconds
+#constant ENEMY_SCAN_TIME            3 // seconds
 #constant ENEMY_MOVEMENT_TIME        2 // seconds
 #constant ENEMY_MOVEMENT_VELOCITY    15
 #constant ENEMY_FIRE_DISTANCE        25
@@ -18,10 +18,12 @@ type tEnemy
   timer as float
   fireTimer as float
   projectileManager as tProjectileManager
+  lifeCollectableManager as tLifeCollectableManager
   alive as integer
+  dropsLife as integer
 endtype
 
-function Enemy_Create(x, y)
+function Enemy_Create(x, y, dropsLife)
   enemy as tEnemy
   image = LoadImage("images/enemy.png")
 	SetImageMagFilter(image, 0) // These two instuctions make it so
@@ -59,8 +61,10 @@ function Enemy_Create(x, y)
   enemy.scan = scan
   enemy.scanDown = scanDown
   enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, ENEMY_PROJECTILE_LIFESPAN)
+  enemy.lifeCollectableManager = LifeCollectableManager_Create()
   enemy.timer = Timer()
   enemy.alive = 1
+  enemy.dropsLife = dropsLife
   Enemy_MovingLeftState_Initialize(enemy)
 endfunction enemy
 
@@ -119,6 +123,7 @@ function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"))
   ProjectileManager_Destroy(enemy.projectileManager)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
+  LifeCollectableManager_Add(enemy.lifeCollectableManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
   DeleteSprite(enemy.sprite)
   DeleteSprite(enemy.scan)
   DeleteSprite(enemy.scanDown)
