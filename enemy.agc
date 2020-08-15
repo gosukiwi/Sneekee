@@ -2,7 +2,7 @@
 #constant ENEMY_STATE_MOVING_RIGHT   1
 #constant ENEMY_STATE_ATTACKING      2
 #constant ENEMY_STATE_SCANNING_DOWN  3
-#constant ENEMY_SCAN_TIME            3 // seconds
+#constant ENEMY_SCAN_TIME            2 // seconds
 #constant ENEMY_MOVEMENT_TIME        2 // seconds
 #constant ENEMY_MOVEMENT_VELOCITY    15
 #constant ENEMY_FIRE_DISTANCE        25
@@ -76,7 +76,7 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
       Enemy_AttackingState_Initialize(enemy)
     elseif GetSpriteCollision(enemy.scanDown, player.sprite) and GetSpriteVisible(enemy.scanDown)
       Enemy_AttackingState_Initialize(enemy)
-    elseif ProjectileManager_IsColliding(player.rocks, enemy.sprite) or ProjectileManager_IsColliding(player.rocks, enemy.scan)
+    elseif ProjectileManager_IsColliding(player.rocks, enemy.scan) and enemy.state <> ENEMY_STATE_SCANNING_DOWN
       Enemy_ScanningDownState_Initialize(enemy)
     endif
   endif
@@ -133,6 +133,7 @@ function Enemy_MovingLeftState_Initialize(enemy ref as tEnemy)
   SetSpriteFlip(enemy.scan, 0, 0)
   SetSpriteVisible(enemy.scan, 1)
   PlaySprite(enemy.scan, 10, 1, -1, -1)
+  SetSpritePosition(enemy.scan, GetSpriteX(enemy.sprite) - GetSpriteWidth(enemy.scan), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   enemy.timer = Timer()
   enemy.state = ENEMY_STATE_MOVING_LEFT
 endfunction
@@ -159,6 +160,7 @@ function Enemy_MovingRightState_Initialize(enemy ref as tEnemy)
   SetSpriteFlip(enemy.scan, 1, 0)
   SetSpriteVisible(enemy.scan, 1)
   PlaySprite(enemy.scan, 10, 1, -1, -1)
+  SetSpritePosition(enemy.scan, GetSpriteX(enemy.sprite) + GetSpriteWidth(enemy.sprite), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   enemy.timer = Timer()
   enemy.state = ENEMY_STATE_MOVING_RIGHT
 endfunction
@@ -221,9 +223,14 @@ function Enemy_ScanningDownState_Tick(enemy ref as tEnemy)
     SetSpritePosition(enemy.scanDown, GetSpriteX(enemy.sprite) - GetSpriteWidth(enemy.scanDown), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   endif
 
+  Log("Elapsed:" + Str(Timer() - enemy.timer))
   if Timer() - enemy.timer > ENEMY_SCAN_TIME
     Enemy_ScanningDownState_Cleanup(enemy)
-    Enemy_MovingLeftState_Initialize(enemy)
+    if Random(1, 2) = 1
+      Enemy_MovingLeftState_Initialize(enemy)
+    else
+      Enemy_MovingRightState_Initialize(enemy)
+    endif
   endif
 endfunction
 

@@ -67,6 +67,7 @@ endfunction
 // LEVELS
 // =============================================================================
 function GameScene_CreateLevel1()
+  g.lives = PLAYER_INITIAL_LIVES
   scene as tGameScene
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
