@@ -1,4 +1,4 @@
-// Project: neekee
+// Project: sneekee
 // Created: 2020-08-06
 #include "util/keys.agc"
 #include "util/math.agc"
@@ -17,6 +17,7 @@
 #include "hearts_hud.agc"
 #include "shuriken_hud.agc"
 #include "blink_tween.agc"
+#include "sign.agc"
 #include "collectable_manager.agc"
 #include "scenes/scene_manager.agc"
 #include "scenes/main_menu_scene.agc"

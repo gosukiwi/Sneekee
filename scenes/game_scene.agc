@@ -11,6 +11,7 @@ type tGameScene
   music as integer
   level as integer
   mustIncreaseLevel as integer
+  signs as tSign[]
 endtype
 
 function GameScene_Create(level)
@@ -67,6 +68,10 @@ function GameScene_Destroy(scene ref as tGameScene)
   SetViewOffset(0, 0)
   DeleteMusicOGG(scene.music)
   StopSound(SoundManager_Get(g.soundManager, "alarm"))
+  for i = 0 to scene.signs.length
+    Sign_Destroy(scene.signs[i])
+  next i
+  scene.signs.length = -1
 endfunction
 
 // PRIVATE
@@ -92,6 +97,9 @@ function GameScene_CreateLevel1()
   scene.enemies.insert(Enemy_Create(75, 66, ENEMY_DROPS_NOTHING))
   scene.enemies.insert(Enemy_Create(50, 30, ENEMY_DROPS_NOTHING))
   scene.enemies.insert(Enemy_Create(125, 30, ENEMY_DROPS_LIFE))
+  scene.signs.insert(Sign_Create("images/wasd.png", 20, 98, DEPTH_FRONT))
+  scene.signs.insert(Sign_Create("images/space.png", 75, 88, DEPTH_MIDDLE))
+  scene.signs.insert(Sign_Create("images/ctrl.png", 100, 58, DEPTH_MIDDLE))
 endfunction scene
 
 function GameScene_CreateLevel2()
