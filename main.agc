@@ -37,6 +37,8 @@ type tState
   soundManager as tSoundManager
   explosionManager as tExplosionManager
   sceneManager as tSceneManager
+  lifeCollectables as tCollectableManager
+  shurikenCollectables as tCollectableManager
   lives as integer
   shurikens as integer
 endtype

@@ -22,3 +22,11 @@ function CollectableManager_Add(manager ref as tCollectableManager, x as integer
   SetSpritePhysicsImpulse(sprite, GetSpriteXByOffset(sprite), GetSpriteYByOffset(sprite), 0, -LIFE_IMPULSE)
   manager.collectables.insert(sprite)
 endfunction
+
+function CollectableManager_Destroy(manager ref as tCollectableManager)
+  for i = 0 to manager.collectables.length
+    DeleteSprite(manager.collectables[i])
+  next i
+  manager.collectables.length = -1
+  DeleteImage(manager.image)
+endfunction

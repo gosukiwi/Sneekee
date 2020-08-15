@@ -12,6 +12,8 @@
 #constant ENEMY_DROPS_NOTHING        0
 #constant ENEMY_DROPS_LIFE           1
 #constant ENEMY_DROPS_SHURIKEN       2
+#constant ENEMY_DIRECTION_LEFT       0
+#constant ENEMY_DIRECTION_RIGHT      1
 
 type tEnemy
   sprite as integer
@@ -25,6 +27,7 @@ type tEnemy
   shurikenManager as tCollectableManager
   alive as integer
   drop as integer
+  lastDirection as integer
 endtype
 
 function Enemy_Create(x, y, drop)
@@ -65,8 +68,6 @@ function Enemy_Create(x, y, drop)
   enemy.scan = scan
   enemy.scanDown = scanDown
   enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, ENEMY_PROJECTILE_LIFESPAN)
-  enemy.livesManager = CollectableManager_Create(LoadImage("images/heart-small.png"), SPRITE_LIVES_GROUP)
-  enemy.shurikenManager = CollectableManager_Create(LoadImage("images/shuriken.png"), SPRITE_SHURIKEN_COLLECTABLE_GROUP)
   enemy.timer = Timer()
   enemy.alive = 1
   enemy.drop = drop
@@ -105,6 +106,7 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
       elseif group = SPRITE_SHURIKEN_GROUP and GetSpriteVisible(other)
         PlaySound(SoundManager_Get(g.soundManager, "shuriken-hit"), 10)
         SetSpriteVisible(other, 0)
+        SetSpritePosition(other, -10, -10)
         Enemy_Destroy(enemy, 0)
         exitfunction
       endif
@@ -134,8 +136,8 @@ function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
 
   if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"), SOUND_VOLUME)
-  if enemy.drop = ENEMY_DROPS_LIFE then CollectableManager_Add(enemy.livesManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
-  if enemy.drop = ENEMY_DROPS_SHURIKEN then CollectableManager_Add(enemy.shurikenManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+  if enemy.drop = ENEMY_DROPS_LIFE then CollectableManager_Add(g.lifeCollectables, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+  if enemy.drop = ENEMY_DROPS_SHURIKEN then CollectableManager_Add(g.shurikenCollectables, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
 
   DeleteSprite(enemy.sprite)
   DeleteSprite(enemy.scan)
@@ -153,6 +155,7 @@ function Enemy_MovingLeftState_Initialize(enemy ref as tEnemy)
   PlaySprite(enemy.scan, 10, 1, -1, -1)
   SetSpritePosition(enemy.scan, GetSpriteX(enemy.sprite) - GetSpriteWidth(enemy.scan), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   enemy.timer = Timer()
+  enemy.lastDirection = ENEMY_DIRECTION_LEFT
   enemy.state = ENEMY_STATE_MOVING_LEFT
 endfunction
 
@@ -180,6 +183,7 @@ function Enemy_MovingRightState_Initialize(enemy ref as tEnemy)
   PlaySprite(enemy.scan, 10, 1, -1, -1)
   SetSpritePosition(enemy.scan, GetSpriteX(enemy.sprite) + GetSpriteWidth(enemy.sprite), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   enemy.timer = Timer()
+  enemy.lastDirection = ENEMY_DIRECTION_RIGHT
   enemy.state = ENEMY_STATE_MOVING_RIGHT
 endfunction
 
@@ -226,7 +230,7 @@ function Enemy_ScanningDownState_Tick(enemy ref as tEnemy)
 
   if Timer() - enemy.timer > ENEMY_SCAN_TIME
     Enemy_ScanningDownState_Cleanup(enemy)
-    if Random(1, 2) = 1
+    if enemy.lastDirection = ENEMY_DIRECTION_LEFT
       Enemy_MovingLeftState_Initialize(enemy)
     else
       Enemy_MovingRightState_Initialize(enemy)

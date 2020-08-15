@@ -60,6 +60,8 @@ function GameScene_Destroy(scene ref as tGameScene)
   Map_Destroy(scene.map)
   HeartsHud_Destroy(scene.hud)
   ShurikensHud_Destroy(scene.shurihud)
+  CollectableManager_Destroy(g.lifeCollectables)
+  CollectableManager_Destroy(g.shurikenCollectables)
   DeleteSprite(scene.button)
   DeleteSprite(scene.background)
   SetViewOffset(0, 0)
@@ -74,6 +76,8 @@ endfunction
 function GameScene_CreateLevel1()
   g.lives = PLAYER_INITIAL_LIVES
   g.shurikens = PLAYER_INITIAL_SHURIKENS
+  GameScene_CreateGlobalCollectables()
+
   scene as tGameScene
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
@@ -91,6 +95,7 @@ function GameScene_CreateLevel1()
 endfunction scene
 
 function GameScene_CreateLevel2()
+  GameScene_CreateGlobalCollectables()
   scene as tGameScene
   scene.map = Map_Create("maps/map-2.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
@@ -107,6 +112,7 @@ function GameScene_CreateLevel2()
 endfunction scene
 
 function GameScene_CreateLevel3()
+  GameScene_CreateGlobalCollectables()
   scene as tGameScene
   scene.map = Map_Create("maps/map-3.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
@@ -124,6 +130,7 @@ function GameScene_CreateLevel3()
 endfunction scene
 
 function GameScene_CreateLevel4()
+  GameScene_CreateGlobalCollectables()
   scene as tGameScene
   scene.map = Map_Create("maps/map-4.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
@@ -261,4 +268,9 @@ function GameScene_PollInput(scene ref as tGameScene)
     ShurikensHud_Pop(scene.shurihud)
     Player_ThrowShuriken(scene.player)
   endif
+endfunction
+
+function GameScene_CreateGlobalCollectables()
+  g.lifeCollectables = CollectableManager_Create(LoadImage("images/heart-small.png"), SPRITE_LIVES_GROUP)
+  g.shurikenCollectables = CollectableManager_Create(LoadImage("images/shuriken.png"), SPRITE_SHURIKEN_COLLECTABLE_GROUP)
 endfunction
