@@ -1,0 +1,3 @@
+scan-down1.png:0:0:12:12
+scan-down2.png:12:0:12:12
+scan-down3.png:24:0:12:12

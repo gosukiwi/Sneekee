@@ -8,8 +8,8 @@
 #constant SPRITE_ENEMY_PROJECTILE_GROUP 6
 #constant SPRITE_ENEMY_SCAN             7
 #constant PHYSICS_PLAYER_CATEGORY %10
-#constant PHYSICS_PROJECTILE_COLLISION_BITS %10
-#constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11
+#constant PHYSICS_PROJECTILE_COLLISION_BITS  %10 // collides with player only
+#constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11 // collides with player and everything else
 #constant ENEMY_PROJECTILE_IMPULSE_FORCE 50
 // Debugging
 #constant DEBUGGING 0

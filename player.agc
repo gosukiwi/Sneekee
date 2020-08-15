@@ -5,9 +5,9 @@
 #constant PLAYER_DIRECTION_RIGHT     0
 #constant PLAYER_DIRECTION_LEFT      1
 #constant PLAYER_AUTOATTACK_CD       0.5
-#constant PLAYER_ROCK_IMPULSE_FORCE 25
-#constant PLAYER_MOVEMENT_VELOCITY 20
-#constant PLAYER_ROCK_ALIVE_TIME 5
+#constant PLAYER_ROCK_IMPULSE_FORCE  30
+#constant PLAYER_MOVEMENT_VELOCITY   20
+#constant PLAYER_ROCK_ALIVE_TIME     5
 
 type tPlayer
   image as integer

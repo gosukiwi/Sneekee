@@ -1,16 +1,19 @@
 #constant ENEMY_STATE_MOVING_LEFT    0
 #constant ENEMY_STATE_MOVING_RIGHT   1
 #constant ENEMY_STATE_ATTACKING      2
-#constant ENEMY_SCAN_TIME            2
-#constant ENEMY_MOVEMENT_TIME        2
+#constant ENEMY_STATE_SCANNING_DOWN  3
+#constant ENEMY_SCAN_TIME            3 // seconds
+#constant ENEMY_MOVEMENT_TIME        2 // seconds
 #constant ENEMY_MOVEMENT_VELOCITY    15
 #constant ENEMY_FIRE_DISTANCE        25
 #constant ENEMY_FIRE_DELAY           0.5
 #constant ENEMY_PROJECTILE_SPEED     1
+#constant ENEMY_PROJECTILE_LIFESPAN  5 // seconds
 
 type tEnemy
   sprite as integer
   scan as integer
+  scanDown as integer
   state as integer
   timer as float
   fireTimer as float
@@ -42,9 +45,20 @@ function Enemy_Create(x, y)
   SetSpriteShape(scan, 3) // polygon
   SetSpriteGroup(scan, SPRITE_ENEMY_SCAN)
 
+  // Scan down
+  image = LoadImage("images/scan-down.png")
+	SetImageMagFilter(image, 0) // These two instuctions make it so
+	SetImageMinFilter(image, 0) // resizing is pixel-perfect!
+  scanDown = CreateSprite(image)
+	SetSpriteAnimation(scanDown, 12, 12, 3)
+  SetSpriteVisible(scanDown, 0)
+  SetSpriteShape(scanDown, 3) // polygon
+  SetSpriteGroup(scanDown, SPRITE_ENEMY_SCAN)
+
   enemy.sprite = sprite
   enemy.scan = scan
-  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, 5)
+  enemy.scanDown = scanDown
+  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, ENEMY_PROJECTILE_LIFESPAN)
   enemy.timer = Timer()
   enemy.alive = 1
   Enemy_MovingLeftState_Initialize(enemy)
@@ -57,8 +71,14 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
   ProjectileManager_Update(enemy.projectileManager, delta#)
 
   // Collision
-  if enemy.state <> ENEMY_STATE_ATTACKING and GetSpriteCollision(enemy.scan, player.sprite)
-    Enemy_AttackingState_Initialize(enemy)
+  if enemy.state <> ENEMY_STATE_ATTACKING
+    if GetSpriteCollision(enemy.scan, player.sprite) and GetSpriteVisible(enemy.scan)
+      Enemy_AttackingState_Initialize(enemy)
+    elseif GetSpriteCollision(enemy.scanDown, player.sprite) and GetSpriteVisible(enemy.scanDown)
+      Enemy_AttackingState_Initialize(enemy)
+    elseif ProjectileManager_IsColliding(player.rocks, enemy.sprite) or ProjectileManager_IsColliding(player.rocks, enemy.scan)
+      Enemy_ScanningDownState_Initialize(enemy)
+    endif
   endif
 
   if GetSpriteCollision(enemy.sprite, player.hurtbox) and Player_IsInHurtboxFrame(player)
@@ -88,6 +108,9 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
     case ENEMY_STATE_ATTACKING
       Enemy_AttackingState_Tick(enemy, player)
     endcase
+    case ENEMY_STATE_SCANNING_DOWN
+      Enemy_ScanningDownState_Tick(enemy)
+    endcase
   endselect
 endfunction
 
@@ -98,11 +121,11 @@ function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
   DeleteSprite(enemy.sprite)
   DeleteSprite(enemy.scan)
+  DeleteSprite(enemy.scanDown)
 endfunction
 
 // PRIVATE
 // =============================================================================
-
 // MOVING LEFT STATE
 // =============================================================================
 function Enemy_MovingLeftState_Initialize(enemy ref as tEnemy)
@@ -165,9 +188,50 @@ function Enemy_AttackingState_Initialize(enemy ref as tEnemy)
     case ENEMY_STATE_MOVING_RIGHT
       Enemy_MovingRightState_Cleanup(enemy)
     endcase
+    case ENEMY_STATE_SCANNING_DOWN
+      Enemy_ScanningDownState_Cleanup(enemy)
+    endcase
   endselect
   enemy.state = ENEMY_STATE_ATTACKING
 endfunction
+
+// SCANNING DOWN STATE
+// =============================================================================
+function Enemy_ScanningDownState_Initialize(enemy ref as tEnemy)
+  select enemy.state
+    case ENEMY_STATE_MOVING_LEFT
+      Enemy_MovingLeftState_Cleanup(enemy)
+      SetSpriteFlip(enemy.scanDown, 0, 0)
+    endcase
+    case ENEMY_STATE_MOVING_RIGHT
+      Enemy_MovingRightState_Cleanup(enemy)
+      SetSpriteFlip(enemy.scanDown, 1, 0)
+    endcase
+  endselect
+  SetSpriteVisible(enemy.scanDown, 1)
+  PlaySprite(enemy.scanDown, 10, 1, -1, -1)
+  enemy.timer = Timer()
+  enemy.state = ENEMY_STATE_SCANNING_DOWN
+endfunction
+
+function Enemy_ScanningDownState_Tick(enemy ref as tEnemy)
+  if GetSpriteFlippedH(enemy.scanDown)
+    SetSpritePosition(enemy.scanDown, GetSpriteX(enemy.sprite) + GetSpriteWidth(enemy.sprite), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
+  else
+    SetSpritePosition(enemy.scanDown, GetSpriteX(enemy.sprite) - GetSpriteWidth(enemy.scanDown), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
+  endif
+
+  if Timer() - enemy.timer > ENEMY_SCAN_TIME
+    Enemy_ScanningDownState_Cleanup(enemy)
+    Enemy_MovingLeftState_Initialize(enemy)
+  endif
+endfunction
+
+function Enemy_ScanningDownState_Cleanup(enemy ref as tEnemy)
+  SetSpriteVisible(enemy.scanDown, 0)
+endfunction
+// END OF STATES
+// =============================================================================
 
 // 1. Move close to player
 // 2. Shoot

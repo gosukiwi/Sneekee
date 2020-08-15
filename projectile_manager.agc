@@ -57,3 +57,9 @@ function ProjectileManager_Destroy(manager ref as tProjectileManager)
   DeleteImage(manager.image)
   manager.projectiles.length = -1
 endfunction
+
+function ProjectileManager_IsColliding(manager ref as tProjectileManager, sprite as integer)
+  for i = 0 to manager.projectiles.length
+    if GetSpriteCollision(manager.projectiles[i].sprite, sprite) then exitfunction 1
+  next i
+endfunction 0
