@@ -77,10 +77,10 @@ function GameScene_CreateLevel1()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(125, 106, 1))
-  scene.enemies.insert(Enemy_Create(75, 66, 1))
+  scene.enemies.insert(Enemy_Create(125, 106, 0))
+  scene.enemies.insert(Enemy_Create(75, 66, 0))
+  scene.enemies.insert(Enemy_Create(50, 30, 0))
   scene.enemies.insert(Enemy_Create(125, 30, 1))
-  scene.enemies.insert(Enemy_Create(50, 30, 1))
 endfunction scene
 
 function GameScene_CreateLevel2()
@@ -93,9 +93,9 @@ function GameScene_CreateLevel2()
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(25, 106, 1))
+  scene.enemies.insert(Enemy_Create(25, 106, 0))
   scene.enemies.insert(Enemy_Create(96, 72, 1))
-  scene.enemies.insert(Enemy_Create(72, 40, 1))
+  scene.enemies.insert(Enemy_Create(72, 40, 0))
 endfunction scene
 // =============================================================================
 
