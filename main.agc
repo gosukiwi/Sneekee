@@ -11,6 +11,7 @@
 #include "sound_manager.agc"
 #include "projectile_manager.agc"
 #include "explosion_manager.agc"
+#include "shuriken.agc"
 #include "player.agc"
 #include "enemy.agc"
 #include "hearts_hud.agc"

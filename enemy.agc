@@ -97,6 +97,9 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
 
       if group = SPRITE_PLAYER_GROUP and enemy.state <> ENEMY_STATE_ATTACKING
         Enemy_AttackingState_Initialize(enemy)
+      elseif group = SPRITE_SHURIKEN_GROUP and GetSpriteVisible(other)
+        Enemy_Destroy(enemy, 0)
+        exitfunction
       endif
     until GetSpriteNextContact() = 0
   endif

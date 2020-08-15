@@ -8,13 +8,15 @@
 #constant SPRITE_ENEMY_SCAN              5
 #constant SPRITE_LIVES_GROUP             6
 #constant SPRITE_PLAYER_ROCK             7
+#constant SPRITE_SHURIKEN_GROUP          8
 #constant PHYSICS_PLAYER_CATEGORY %10
 #constant PHYSICS_PROJECTILE_COLLISION_BITS  %10 // collides with player only
 #constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11 // collides with player and everything else
+#constant SHURIKEN_COLLISION_BITS            %01 // not with player, yes with everything else
 #constant ENEMY_PROJECTILE_IMPULSE_FORCE 50
 // Debugging
 #constant DEBUGGING 0
-#constant INITIAL_LEVEL 4
+#constant INITIAL_LEVEL 1
 #constant LAST_LEVEL 4
 // Depth
 #constant DEPTH_FRONT        0
