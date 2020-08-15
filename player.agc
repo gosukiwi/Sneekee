@@ -5,10 +5,9 @@
 #constant PLAYER_DIRECTION_RIGHT     0
 #constant PLAYER_DIRECTION_LEFT      1
 #constant PLAYER_AUTOATTACK_CD       0.5
-
-type tPlayerRock
-  rock as tSimpleSprite
-endtype
+#constant PLAYER_ROCK_IMPULSE_FORCE 25
+#constant PLAYER_MOVEMENT_VELOCITY 20
+#constant PLAYER_ROCK_ALIVE_TIME 5
 
 type tPlayer
   image as integer
@@ -20,6 +19,8 @@ type tPlayer
   lastAutoattack as float
   blinkTween as tBlinkTween
   categoryBits as integer
+  rocks as tProjectileManager
+  rockPlacedAt as integer
 endtype
 
 function Player_Create(x, y)
@@ -54,6 +55,8 @@ function Player_Create(x, y)
   player.lastAutoattack = -1
   player.blinkTween = BlinkTween_Create(player.sprite)
   player.categoryBits = PHYSICS_PLAYER_CATEGORY
+  player.rocks = ProjectileManager_Create(LoadImage("images/rock.png"), SPRITE_PLAYER_ROCK, PHYSICS_PLAYER_ROCK_COLLISION_BITS, 5)
+  player.rockPlacedAt = -PLAYER_ROCK_ALIVE_TIME
 endfunction player
 
 function Player_Update(player ref as tPlayer, delta#)
@@ -73,6 +76,8 @@ function Player_Update(player ref as tPlayer, delta#)
   Player_HandleInput(player)
 
   // Other
+  ProjectileManager_Update(player.rocks, delta#)
+
   if player.direction = PLAYER_DIRECTION_RIGHT
     SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite), GetSpriteY(player.sprite) - 3)
   else
@@ -93,6 +98,29 @@ function Player_Update(player ref as tPlayer, delta#)
   endif
 endfunction
 
+function Player_Destroy(player ref as tPlayer)
+  DeleteSprite(player.sprite)
+  DeleteSprite(player.hurtbox)
+  DeleteImage(player.image)
+  BlinkTween_Destroy(player.blinkTween)
+  ProjectileManager_Destroy(player.rocks)
+endfunction
+
+function Player_IsInHurtboxFrame(player ref as tPlayer)
+  frame = GetSpriteCurrentFrame(player.sprite)
+  result = frame = 7 or frame = 8
+endfunction result
+
+function Player_Blink(player ref as tPlayer)
+  BlinkTween_Play(player.blinkTween)
+endfunction
+
+function Player_IsBlinking(player ref as tPlayer)
+  isBlinking = BlinkTween_IsPlaying(player.blinkTween)
+endfunction isBlinking
+
+// PRIVATE
+// =============================================================================
 function Player_HandleInput(player ref as tPlayer)
   if ScreenToWorldX(GetRawMouseX()) > GetSpriteX(player.sprite) + GetSpriteOffsetX(player.sprite)
     if player.currentAnimation <> PLAYER_ATTACKING_ANIMATION and player.direction <> PLAYER_DIRECTION_RIGHT
@@ -118,45 +146,27 @@ function Player_HandleInput(player ref as tPlayer)
       Player_PlayAttackingAnimation(player)
       PlaySound(SoundManager_Get(g.soundManager, "woosh"), SOUND_VOLUME)
     endif
-  elseif GetRawMouseRightPressed()
-    // Rock_Create(player.x, player.y)
-    // player.rocks.insert()
+  elseif GetRawMouseRightPressed() and Timer() - player.rockPlacedAt > PLAYER_ROCK_ALIVE_TIME
+    player.rockPlacedAt = Timer()
+    position as tVector
+    direction as tVector
+    position = Vector_Create(GetSpriteX(player.sprite) + 6, GetSpriteY(player.sprite))
+    direction = Vector_Normalize(Vector_SetInitialPoint(Vector_Create(ScreenToWorldX(GetRawMouseX()), ScreenToWorldY(GetRawMouseY())), position))
+    ProjectileManager_Add(player.rocks, position, direction, PLAYER_ROCK_IMPULSE_FORCE)
   endif
 
   if GetRawKeyState(KEY_D)
     Player_PlayWakingAnimation(player)
-    SetSpritePhysicsVelocity(player.sprite, 20, GetSpritePhysicsVelocityY(player.sprite))
+    SetSpritePhysicsVelocity(player.sprite, PLAYER_MOVEMENT_VELOCITY, GetSpritePhysicsVelocityY(player.sprite))
   elseif GetRawKeyState(KEY_A)
     Player_PlayWakingAnimation(player)
-    SetSpritePhysicsVelocity(player.sprite, -20, GetSpritePhysicsVelocityY(player.sprite))
+    SetSpritePhysicsVelocity(player.sprite, -PLAYER_MOVEMENT_VELOCITY, GetSpritePhysicsVelocityY(player.sprite))
   else
     Player_PlayIdleAnimation(player)
     SetSpritePhysicsVelocity(player.sprite, 0, GetSpritePhysicsVelocityY(player.sprite))
   endif
 endfunction
 
-function Player_Destroy(player ref as tPlayer)
-  DeleteSprite(player.sprite)
-  DeleteSprite(player.hurtbox)
-  DeleteImage(player.image)
-  BlinkTween_Destroy(player.blinkTween)
-endfunction
-
-function Player_IsInHurtboxFrame(player ref as tPlayer)
-  frame = GetSpriteCurrentFrame(player.sprite)
-  result = frame = 7 or frame = 8
-endfunction result
-
-function Player_Blink(player ref as tPlayer)
-  BlinkTween_Play(player.blinkTween)
-endfunction
-
-function Player_IsBlinking(player ref as tPlayer)
-  isBlinking = BlinkTween_IsPlaying(player.blinkTween)
-endfunction isBlinking
-
-// PRIVATE
-// =============================================================================
 function Player_PlayIdleAnimation(player ref as tPlayer)
   if player.currentAnimation = PLAYER_IDLE_ANIMATION then exitfunction
   if GetSpritePlaying(player.sprite) and player.currentAnimation = PLAYER_ATTACKING_ANIMATION then exitfunction

@@ -44,7 +44,7 @@ function Enemy_Create(x, y)
 
   enemy.sprite = sprite
   enemy.scan = scan
-  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, 50, PHYSICS_PROJECTILE_COLLISION_BITS)
+  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, 5)
   enemy.timer = Timer()
   enemy.alive = 1
   Enemy_MovingLeftState_Initialize(enemy)
@@ -204,6 +204,6 @@ function Enemy_Fire(enemy ref as tEnemy, player ref as tPlayer)
     // Here 1.5 is half of the projectile's width and height
     endpoint  = Vector_Create(GetSpriteX(player.sprite) - 1.5 + GetSpriteOffsetX(player.sprite), GetSpriteY(player.sprite) - 1.5 + GetSpriteOffsetY(player.sprite))
     direction = Vector_Normalize(Vector_SetInitialPoint(endpoint, position))
-    ProjectileManager_Add(enemy.projectileManager, position, direction)
+    ProjectileManager_Add(enemy.projectileManager, position, direction, ENEMY_PROJECTILE_IMPULSE_FORCE)
   endif
 endfunction
