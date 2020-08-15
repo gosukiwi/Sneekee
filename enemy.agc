@@ -185,23 +185,6 @@ function Enemy_MovingRightState_Cleanup(enemy ref as tEnemy)
   SetSpriteVisible(enemy.scan, 0)
 endfunction
 
-// ATTACKING STATE
-// =============================================================================
-function Enemy_AttackingState_Initialize(enemy ref as tEnemy)
-  select enemy.state
-    case ENEMY_STATE_MOVING_LEFT
-      Enemy_MovingLeftState_Cleanup(enemy)
-    endcase
-    case ENEMY_STATE_MOVING_RIGHT
-      Enemy_MovingRightState_Cleanup(enemy)
-    endcase
-    case ENEMY_STATE_SCANNING_DOWN
-      Enemy_ScanningDownState_Cleanup(enemy)
-    endcase
-  endselect
-  enemy.state = ENEMY_STATE_ATTACKING
-endfunction
-
 // SCANNING DOWN STATE
 // =============================================================================
 function Enemy_ScanningDownState_Initialize(enemy ref as tEnemy)
@@ -241,8 +224,23 @@ endfunction
 function Enemy_ScanningDownState_Cleanup(enemy ref as tEnemy)
   SetSpriteVisible(enemy.scanDown, 0)
 endfunction
-// END OF STATES
+
+// ATTACKING STATE
 // =============================================================================
+function Enemy_AttackingState_Initialize(enemy ref as tEnemy)
+  select enemy.state
+    case ENEMY_STATE_MOVING_LEFT
+      Enemy_MovingLeftState_Cleanup(enemy)
+    endcase
+    case ENEMY_STATE_MOVING_RIGHT
+      Enemy_MovingRightState_Cleanup(enemy)
+    endcase
+    case ENEMY_STATE_SCANNING_DOWN
+      Enemy_ScanningDownState_Cleanup(enemy)
+    endcase
+  endselect
+  enemy.state = ENEMY_STATE_ATTACKING
+endfunction
 
 // 1. Move close to player
 // 2. Shoot
@@ -267,6 +265,8 @@ function Enemy_AttackingState_Tick(enemy ref as tEnemy, player ref as tPlayer)
     endif
   endif
 endfunction
+// END OF STATES
+// =============================================================================
 
 function Enemy_Fire(enemy ref as tEnemy, player ref as tPlayer)
   if enemy.fireTimer = 0 or Timer() - enemy.fireTimer > ENEMY_FIRE_DELAY

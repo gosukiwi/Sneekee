@@ -1,5 +1,3 @@
-#constant LAST_LEVEL 2
-
 type tGameScene
   player as tPlayer
   enemies as tEnemy[]
@@ -21,6 +19,10 @@ function GameScene_Create(level)
   scene as tGameScene
   if level = 2
     scene = GameScene_CreateLevel2()
+  elseif level = 3
+    scene = GameScene_CreateLevel3()
+  elseif level = 4
+    scene = GameScene_CreateLevel4()
   else
     scene = GameScene_CreateLevel1()
   endif
@@ -96,6 +98,38 @@ function GameScene_CreateLevel2()
   scene.enemies.insert(Enemy_Create(25, 106, 0))
   scene.enemies.insert(Enemy_Create(96, 72, 1))
   scene.enemies.insert(Enemy_Create(72, 40, 0))
+endfunction scene
+
+function GameScene_CreateLevel3()
+  scene as tGameScene
+  scene.map = Map_Create("maps/map-3.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
+  scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
+  scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
+  scene.hud = HeartsHud_Create(g.lives)
+  scene.button = GameScene_CreateNextLevelButton(9, 37)
+  scene.music = GameScene_CreateMusic("music/ingame.ogg")
+  scene.alarm = 0
+  scene.alarmPlaying = 0
+  scene.enemies.insert(Enemy_Create(112, 104, 0))
+  scene.enemies.insert(Enemy_Create(105, 72, 1))
+  scene.enemies.insert(Enemy_Create(25, 72, 0))
+  scene.enemies.insert(Enemy_Create(120, 32, 0))
+endfunction scene
+
+function GameScene_CreateLevel4()
+  scene as tGameScene
+  scene.map = Map_Create("maps/map-4.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
+  scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
+  scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
+  scene.hud = HeartsHud_Create(g.lives)
+  scene.button = GameScene_CreateNextLevelButton(145, 13)
+  scene.music = GameScene_CreateMusic("music/ingame.ogg")
+  scene.alarm = 0
+  scene.alarmPlaying = 0
+  scene.enemies.insert(Enemy_Create(80, 104, 0))
+  scene.enemies.insert(Enemy_Create(88, 72, 1))
+  scene.enemies.insert(Enemy_Create(108, 40, 0))
+  scene.enemies.insert(Enemy_Create(128, 8, 0))
 endfunction scene
 // =============================================================================
 

@@ -14,7 +14,8 @@
 #constant ENEMY_PROJECTILE_IMPULSE_FORCE 50
 // Debugging
 #constant DEBUGGING 0
-#constant INITIAL_LEVEL 1
+#constant INITIAL_LEVEL 4
+#constant LAST_LEVEL 4
 // Depth
 #constant DEPTH_FRONT        0
 #constant DEPTH_FRONT_MIDDLE 250
