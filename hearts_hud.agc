@@ -10,7 +10,8 @@ function HeartsHud_Push(hud ref as tHeartsHud)
   FixSpriteToScreen(sprite, 1)
   SetSpritePosition(sprite, 1 + (GetImageWidth(hud.image) + HEARTS_HUD_PADDING) * (hud.hearts.length + 1), 1)
   SetSpriteDepth(sprite, DEPTH_FRONT)
-endfunction sprite
+  hud.hearts.insert(sprite)
+endfunction
 
 function HeartsHud_Pop(hud ref as tHeartsHud)
   if hud.hearts.length = -1 then exitfunction
@@ -25,7 +26,7 @@ function HeartsHud_Create(lives as integer)
   SetImageMinFilter(hud.image, 0)
   SetImageMagFilter(hud.image, 0)
   for i = 1 to lives
-    hud.hearts.insert(HeartsHud_Push(hud))
+    HeartsHud_Push(hud)
   next i
 endfunction hud
 
