@@ -7,7 +7,7 @@
 #constant PLAYER_AUTOATTACK_CD       0.5
 #constant PLAYER_ROCK_IMPULSE_FORCE  30
 #constant PLAYER_MOVEMENT_VELOCITY   20
-#constant PLAYER_ROCK_ALIVE_TIME     5
+#constant PLAYER_ROCK_ALIVE_TIME     3
 
 type tPlayer
   image as integer

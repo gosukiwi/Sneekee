@@ -73,7 +73,7 @@ function GameScene_CreateLevel1()
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
-  scene.button = GameScene_CreateNextLevelButton()
+  scene.button = GameScene_CreateNextLevelButton(145, 29)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
@@ -89,21 +89,23 @@ function GameScene_CreateLevel2()
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
-  scene.button = GameScene_CreateNextLevelButton()
+  scene.button = GameScene_CreateNextLevelButton(145, 37)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
   scene.enemies.insert(Enemy_Create(25, 106))
+  scene.enemies.insert(Enemy_Create(96, 72))
+  scene.enemies.insert(Enemy_Create(72, 40))
 endfunction scene
 // =============================================================================
 
-function GameScene_CreateNextLevelButton()
+function GameScene_CreateNextLevelButton(x, y)
   image = LoadImage("images/button.png")
 	SetImageMagFilter(image, 0) // These two instuctions make it so
 	SetImageMinFilter(image, 0) // resizing is pixel-perfect!
   button = CreateSprite(image)
   SetSpriteAnimation(button, 6, 3, 2)
-  SetSpritePosition(button, 145, 29)
+  SetSpritePosition(button, x, y)
 endfunction button
 
 function CenterCameraOnPlayer(scene ref as tGameScene)
