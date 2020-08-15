@@ -1,13 +1,13 @@
 // Collisions and Physics
-#constant SPRITE_WALL_GROUP             0
-#constant SPRITE_FLOOR_GROUP            1
-#constant SPRITE_PLAYER_GROUP           2
-#constant SPRITE_PLAYER_HURTBOX_GROUP   3
-#constant SPRITE_PLAYER_ROCK            4
-#constant SPRITE_ENEMY_GROUP            5
-#constant SPRITE_ENEMY_PROJECTILE_GROUP 6
-#constant SPRITE_ENEMY_SCAN             7
-#constant SPRITE_LIVES_GROUP            8
+#constant SPRITE_ENEMY_PROJECTILE_GROUP -1 // Negative groups don't collide with themselves
+#constant SPRITE_WALL_GROUP              0
+#constant SPRITE_FLOOR_GROUP             1
+#constant SPRITE_PLAYER_GROUP            2
+#constant SPRITE_PLAYER_HURTBOX_GROUP    3
+#constant SPRITE_ENEMY_GROUP             4
+#constant SPRITE_ENEMY_SCAN              5
+#constant SPRITE_LIVES_GROUP             6
+#constant SPRITE_PLAYER_ROCK             7
 #constant PHYSICS_PLAYER_CATEGORY %10
 #constant PHYSICS_PROJECTILE_COLLISION_BITS  %10 // collides with player only
 #constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11 // collides with player and everything else
