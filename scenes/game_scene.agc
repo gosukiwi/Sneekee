@@ -25,6 +25,8 @@ function GameScene_Create(level)
     scene = GameScene_CreateLevel3()
   elseif level = 4
     scene = GameScene_CreateLevel4()
+  elseif level = 5
+    scene = GameScene_CreateLevel5()
   else
     scene = GameScene_CreateLevel1()
   endif
@@ -153,6 +155,28 @@ function GameScene_CreateLevel4()
   scene.enemies.insert(Enemy_Create(88, 72, ENEMY_DROPS_LIFE))
   scene.enemies.insert(Enemy_Create(108, 40, ENEMY_DROPS_NOTHING))
   scene.enemies.insert(Enemy_Create(128, 8, ENEMY_DROPS_NOTHING))
+endfunction scene
+
+function GameScene_CreateLevel5()
+  g.lives = PLAYER_INITIAL_LIVES
+  g.shurikens = PLAYER_INITIAL_SHURIKENS
+  GameScene_CreateGlobalCollectables()
+  scene as tGameScene
+  scene.map = Map_Create("maps/map-5.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
+  scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
+  scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
+  scene.hud = HeartsHud_Create(g.lives)
+  scene.shurihud = ShurikensHud_Create(g.shurikens)
+  scene.button = GameScene_CreateNextLevelButton(145, 13)
+  scene.music = GameScene_CreateMusic("music/ingame.ogg")
+  scene.alarm = 0
+  scene.alarmPlaying = 0
+  scene.enemies.insert(Enemy_Create(40, 104, ENEMY_DROPS_SHURIKEN))
+  scene.enemies.insert(Enemy_Create(80, 80, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(112, 40, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(80, 56, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(23, 56, ENEMY_DROPS_SHURIKEN))
+  scene.enemies.insert(Enemy_Create(48, 8, ENEMY_DROPS_NOTHING))
 endfunction scene
 // =============================================================================
 
