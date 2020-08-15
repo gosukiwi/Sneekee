@@ -13,8 +13,12 @@ function GameOverScene_Create()
 endfunction scene
 
 function GameOverScene_Update(scene ref as tGameOverScene, delta as float)
-  if GetRawKeyPressed(KEY_ESCAPE) or GetRawKeyPressed(KEY_ENTER)
+  if GetRawKeyPressed(KEY_ENTER)
     GameOverScene_Destroy(scene)
+    SceneManager_SetCurrent(g.sceneManager, SCENES_GAME_SCENE)
+  elseif GetRawKeyPressed(KEY_ESCAPE)
+    GameOverScene_Destroy(scene)
+    g.lastClear = INITIAL_LEVEL
     SceneManager_SetCurrent(g.sceneManager, SCENES_MAIN_MENU_SCENE)
   endif
 endfunction

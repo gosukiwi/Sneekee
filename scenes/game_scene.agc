@@ -12,6 +12,8 @@ type tGameScene
   level as integer
   mustIncreaseLevel as integer
   signs as tSign[]
+  lives as integer
+  shurikens as integer
 endtype
 
 function GameScene_Create(level)
@@ -83,9 +85,10 @@ endfunction
 function GameScene_CreateLevel1()
   g.lives = PLAYER_INITIAL_LIVES
   g.shurikens = PLAYER_INITIAL_SHURIKENS
-  GameScene_CreateGlobalCollectables()
-
+  GameScene_InitializeGlobals()
   scene as tGameScene
+  scene.lives = g.lives
+  scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
@@ -105,8 +108,11 @@ function GameScene_CreateLevel1()
 endfunction scene
 
 function GameScene_CreateLevel2()
-  GameScene_CreateGlobalCollectables()
+  g.lastClear = 2
+  GameScene_InitializeGlobals()
   scene as tGameScene
+  scene.lives = g.lives
+  scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-2.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
@@ -122,8 +128,11 @@ function GameScene_CreateLevel2()
 endfunction scene
 
 function GameScene_CreateLevel3()
-  GameScene_CreateGlobalCollectables()
+  g.lastClear = 3
+  GameScene_InitializeGlobals()
   scene as tGameScene
+  scene.lives = g.lives
+  scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-3.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
@@ -140,8 +149,11 @@ function GameScene_CreateLevel3()
 endfunction scene
 
 function GameScene_CreateLevel4()
-  GameScene_CreateGlobalCollectables()
+  g.lastClear = 4
+  GameScene_InitializeGlobals()
   scene as tGameScene
+  scene.lives = g.lives
+  scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-4.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
@@ -158,10 +170,11 @@ function GameScene_CreateLevel4()
 endfunction scene
 
 function GameScene_CreateLevel5()
-  g.lives = PLAYER_INITIAL_LIVES
-  g.shurikens = PLAYER_INITIAL_SHURIKENS
-  GameScene_CreateGlobalCollectables()
+  g.lastClear = 4
+  GameScene_InitializeGlobals()
   scene as tGameScene
+  scene.lives = g.lives
+  scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-5.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
@@ -223,6 +236,8 @@ function GameScene_UpdateNextLevelButton(scene ref as tGameScene)
       if scene.level = LAST_LEVEL
         g.sceneManager.current = SCENES_WIN_SCENE
       else
+        g.lives = scene.lives
+        g.shurikens = scene.shurikens
         scene.mustIncreaseLevel = 1
       endif
     endif
@@ -262,18 +277,18 @@ function GameScene_CheckPhysicsCollisions(scene ref as tGameScene)
           // TODO Make particle explosion
 
           if DEBUGGING = 0
-            g.lives = g.lives - 1
-            if g.lives <= 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
+            scene.lives = scene.lives - 1
+            if scene.lives <= 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
           endif
         endif
       elseif group = SPRITE_LIVES_GROUP
         DeleteSprite(other)
-        g.lives = g.lives + 1
+        scene.lives = scene.lives + 1
         HeartsHud_Push(scene.hud)
         PlaySound(SoundManager_Get(g.soundManager, "lifeup"), SOUND_VOLUME)
       elseif group = SPRITE_SHURIKEN_COLLECTABLE_GROUP
         DeleteSprite(other)
-        g.shurikens = g.shurikens + 1
+        scene.shurikens = scene.shurikens + 1
         ShurikensHud_Push(scene.shurihud)
         PlaySound(SoundManager_Get(g.soundManager, "lifeup"), SOUND_VOLUME)
       endif
@@ -295,14 +310,14 @@ function GameScene_CreateMusic(file as string)
 endfunction music
 
 function GameScene_PollInput(scene ref as tGameScene)
-  if GetRawMouseRightPressed() and g.shurikens > 0
-    g.shurikens = g.shurikens - 1
+  if GetRawMouseRightPressed() and scene.shurikens > 0
+    scene.shurikens = scene.shurikens - 1
     ShurikensHud_Pop(scene.shurihud)
     Player_ThrowShuriken(scene.player)
   endif
 endfunction
 
-function GameScene_CreateGlobalCollectables()
+function GameScene_InitializeGlobals()
   g.lifeCollectables = CollectableManager_Create(LoadImage("images/heart-small.png"), SPRITE_LIVES_GROUP)
   g.shurikenCollectables = CollectableManager_Create(LoadImage("images/shuriken.png"), SPRITE_SHURIKEN_COLLECTABLE_GROUP)
 endfunction
