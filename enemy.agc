@@ -223,7 +223,6 @@ function Enemy_ScanningDownState_Tick(enemy ref as tEnemy)
     SetSpritePosition(enemy.scanDown, GetSpriteX(enemy.sprite) - GetSpriteWidth(enemy.scanDown), GetSpriteY(enemy.sprite) - (GetSpriteHeight(enemy.scan) / 2))
   endif
 
-  Log("Elapsed:" + Str(Timer() - enemy.timer))
   if Timer() - enemy.timer > ENEMY_SCAN_TIME
     Enemy_ScanningDownState_Cleanup(enemy)
     if Random(1, 2) = 1
