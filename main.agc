@@ -67,4 +67,6 @@ function LoadAllSounds()
   SoundManager_Register(g.soundManager, "hit", "sound/hit.ogg")
   SoundManager_Register(g.soundManager, "alarm", "sound/alarm.ogg")
   SoundManager_Register(g.soundManager, "lifeup", "sound/lifeup.ogg")
+  SoundManager_Register(g.soundManager, "shuriken-hit", "sound/shuriken-hit.ogg")
+  SoundManager_Register(g.soundManager, "shuriken-grabbed", "sound/shuriken-grabbed.ogg")
 endfunction

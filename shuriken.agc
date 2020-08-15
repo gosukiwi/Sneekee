@@ -35,5 +35,5 @@ function Shuriken_ThrowFrom(shuriken ref as tShuriken, position as tVector, dire
 endfunction
 
 function Shuriken_IsStill(shuriken ref as tShuriken)
-  result = GetSpritePhysicsVelocityX(shuriken.sprite) < 1 and GetSpritePhysicsVelocityY(shuriken.sprite) < 1
+  result = Abs(GetSpritePhysicsVelocityX(shuriken.sprite)) < 1 and Abs(GetSpritePhysicsVelocityY(shuriken.sprite)) < 1
 endfunction result

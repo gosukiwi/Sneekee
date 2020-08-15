@@ -76,8 +76,9 @@ function Player_Update(player ref as tPlayer, delta#)
     until GetSpriteNextContact() = 0
   endif
 
-  if GetSpriteCollision(player.sprite, player.shuriken.sprite) and Shuriken_IsStill(player.shuriken)
+  if GetSpriteCollision(player.sprite, player.shuriken.sprite) and Shuriken_IsStill(player.shuriken) and player.hasShuriken = 0
     Player_PickUpShuriken(player)
+    PlaySound(SoundManager_Get(g.soundManager, "shuriken-grabbed"), SOUND_VOLUME)
   endif
 
   // Input

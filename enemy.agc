@@ -98,6 +98,7 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
       if group = SPRITE_PLAYER_GROUP and enemy.state <> ENEMY_STATE_ATTACKING
         Enemy_AttackingState_Initialize(enemy)
       elseif group = SPRITE_SHURIKEN_GROUP and GetSpriteVisible(other)
+        PlaySound(SoundManager_Get(g.soundManager, "shuriken-hit"), 10)
         Enemy_Destroy(enemy, 0)
         exitfunction
       endif
@@ -123,7 +124,7 @@ endfunction
 
 function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   enemy.alive = 0
-  if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"))
+  if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"), SOUND_VOLUME)
   ProjectileManager_Destroy(enemy.projectileManager)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
   if enemy.dropsLife then LifeCollectableManager_Add(enemy.lifeCollectableManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
