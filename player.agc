@@ -79,6 +79,7 @@ function Player_Update(player ref as tPlayer, delta#)
 
   // Other
   ProjectileManager_Update(player.rocks, delta#)
+  Shuriken_Update(player.shuriken, delta#)
 
   if player.direction = PLAYER_DIRECTION_RIGHT
     SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite), GetSpriteY(player.sprite) - 3)

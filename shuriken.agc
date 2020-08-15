@@ -20,6 +20,7 @@ endfunction shuriken
 
 function Shuriken_Update(shuriken ref as tShuriken, delta as float)
   if GetSpriteVisible(shuriken.sprite) = 0 then exitfunction
+  if Shuriken_IsStill(shuriken) then Shuriken_Hide(shuriken)
 endfunction
 
 function Shuriken_Destroy(shuriken ref as tShuriken)
@@ -37,3 +38,8 @@ endfunction
 function Shuriken_IsStill(shuriken ref as tShuriken)
   result = Abs(GetSpritePhysicsVelocityX(shuriken.sprite)) < 1 and Abs(GetSpritePhysicsVelocityY(shuriken.sprite)) < 1
 endfunction result
+
+function Shuriken_Hide(shuriken ref as tShuriken)
+  SetSpriteVisible(shuriken.sprite, 0)
+  SetSpritePosition(shuriken.sprite, -10, -10)
+endfunction
