@@ -88,11 +88,12 @@ function GameScene_CreateLevel1()
   GameScene_InitializeGlobals()
   scene as tGameScene
   scene.lives = g.lives
+  log("Scene lives: " + Str(scene.lives))
   scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-1.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create(g.lives)
+  scene.hud = HeartsHud_Create(scene.lives)
   scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 29)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
@@ -112,11 +113,12 @@ function GameScene_CreateLevel2()
   GameScene_InitializeGlobals()
   scene as tGameScene
   scene.lives = g.lives
+  log("Scene lives: " + Str(scene.lives))
   scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-2.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create(g.lives)
+  scene.hud = HeartsHud_Create(scene.lives)
   scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 37)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
@@ -132,11 +134,12 @@ function GameScene_CreateLevel3()
   GameScene_InitializeGlobals()
   scene as tGameScene
   scene.lives = g.lives
+  log("Scene lives: " + Str(scene.lives))
   scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-3.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create(g.lives)
+  scene.hud = HeartsHud_Create(scene.lives)
   scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(9, 37)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
@@ -153,11 +156,12 @@ function GameScene_CreateLevel4()
   GameScene_InitializeGlobals()
   scene as tGameScene
   scene.lives = g.lives
+  log("Scene lives: " + Str(scene.lives))
   scene.shurikens = g.shurikens
   scene.map = Map_Create("maps/map-4.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create(g.lives)
+  scene.hud = HeartsHud_Create(scene.lives)
   scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 13)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
@@ -170,7 +174,7 @@ function GameScene_CreateLevel4()
 endfunction scene
 
 function GameScene_CreateLevel5()
-  g.lastClear = 4
+  g.lastClear = 5
   GameScene_InitializeGlobals()
   scene as tGameScene
   scene.lives = g.lives
@@ -178,7 +182,7 @@ function GameScene_CreateLevel5()
   scene.map = Map_Create("maps/map-5.json", Tileset_Create("images/map-tiles.png", 64, "map-tiles"))
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
-  scene.hud = HeartsHud_Create(g.lives)
+  scene.hud = HeartsHud_Create(scene.lives)
   scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 13)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
@@ -236,6 +240,7 @@ function GameScene_UpdateNextLevelButton(scene ref as tGameScene)
       if scene.level = LAST_LEVEL
         g.sceneManager.current = SCENES_WIN_SCENE
       else
+        Log("set lives to " + Str(scene.lives))
         g.lives = scene.lives
         g.shurikens = scene.shurikens
         scene.mustIncreaseLevel = 1
@@ -272,11 +277,11 @@ function GameScene_CheckPhysicsCollisions(scene ref as tGameScene)
 
         if Player_IsBlinking(scene.player) = 0
           PlaySound(SoundManager_Get(g.soundManager, "hit"), SOUND_VOLUME)
-          HeartsHud_Pop(scene.hud)
           Player_Blink(scene.player)
           // TODO Make particle explosion
 
           if DEBUGGING = 0
+            HeartsHud_Pop(scene.hud)
             scene.lives = scene.lives - 1
             if scene.lives <= 0 then g.sceneManager.current = SCENES_GAME_OVER_SCENE
           endif
