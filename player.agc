@@ -6,6 +6,10 @@
 #constant PLAYER_DIRECTION_LEFT      1
 #constant PLAYER_AUTOATTACK_CD       0.5
 
+type tPlayerRock
+  rock as tSimpleSprite
+endtype
+
 type tPlayer
   image as integer
   sprite as integer
@@ -66,6 +70,30 @@ function Player_Update(player ref as tPlayer, delta#)
   endif
 
   // Input
+  Player_HandleInput(player)
+
+  // Other
+  if player.direction = PLAYER_DIRECTION_RIGHT
+    SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite), GetSpriteY(player.sprite) - 3)
+  else
+    SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite) - 5, GetSpriteY(player.sprite) - 3)
+  endif
+
+  BlinkTween_Update(player.blinkTween, delta#)
+  if Player_IsBlinking(player)
+    if player.categoryBits <> 1
+      SetSpriteCategoryBits(player.sprite, 1)
+      player.categoryBits = 1
+    endif
+  else
+    if player.categoryBits <> PHYSICS_PLAYER_CATEGORY
+      SetSpriteCategoryBits(player.sprite, PHYSICS_PLAYER_CATEGORY)
+      player.categoryBits = PHYSICS_PLAYER_CATEGORY
+    endif
+  endif
+endfunction
+
+function Player_HandleInput(player ref as tPlayer)
   if ScreenToWorldX(GetRawMouseX()) > GetSpriteX(player.sprite) + GetSpriteOffsetX(player.sprite)
     if player.currentAnimation <> PLAYER_ATTACKING_ANIMATION and player.direction <> PLAYER_DIRECTION_RIGHT
       player.direction = PLAYER_DIRECTION_RIGHT
@@ -90,6 +118,9 @@ function Player_Update(player ref as tPlayer, delta#)
       Player_PlayAttackingAnimation(player)
       PlaySound(SoundManager_Get(g.soundManager, "woosh"), SOUND_VOLUME)
     endif
+  elseif GetRawMouseRightPressed()
+    // Rock_Create(player.x, player.y)
+    // player.rocks.insert()
   endif
 
   if GetRawKeyState(KEY_D)
@@ -101,26 +132,6 @@ function Player_Update(player ref as tPlayer, delta#)
   else
     Player_PlayIdleAnimation(player)
     SetSpritePhysicsVelocity(player.sprite, 0, GetSpritePhysicsVelocityY(player.sprite))
-  endif
-
-  // Other
-  if player.direction = PLAYER_DIRECTION_RIGHT
-    SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite), GetSpriteY(player.sprite) - 3)
-  else
-    SetSpritePosition(player.hurtbox, GetSpriteX(player.sprite) - 5, GetSpriteY(player.sprite) - 3)
-  endif
-
-  BlinkTween_Update(player.blinkTween, delta#)
-  if Player_IsBlinking(player)
-    if player.categoryBits <> 1
-      SetSpriteCategoryBits(player.sprite, 1)
-      player.categoryBits = 1
-    endif
-  else
-    if player.categoryBits <> PHYSICS_PLAYER_CATEGORY
-      SetSpriteCategoryBits(player.sprite, PHYSICS_PLAYER_CATEGORY)
-      player.categoryBits = PHYSICS_PLAYER_CATEGORY
-    endif
   endif
 endfunction
 

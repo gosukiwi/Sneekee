@@ -7,26 +7,31 @@ type tProjectileManager
   image as integer
   group as integer
   projectiles as tProjectile[]
+  speed as integer
+  collideBits as integer
 endtype
 
-function ProjectileManager_Create(image as integer, group as integer)
+function ProjectileManager_Create(image as integer, group as integer, speed as integer, collideBits as integer)
   manager as tProjectileManager
 	SetImageMagFilter(image, 0) // These two instuctions make it so
 	SetImageMinFilter(image, 0) // resizing is pixel-perfect!
   manager.image = image
   manager.group = group
+  manager.speed = speed
+  manager.collideBits = collideBits
 endfunction manager
 
 function ProjectileManager_Add(manager ref as tProjectileManager, position as tVector, direction as tVector)
   projectile as tProjectile
   projectile.direction = direction
   projectile.sprite = CreateSprite(manager.image)
-	SetSpriteAnimation(projectile.sprite, 3, 3, 2) // TODO: Pass a tileset instead
+	// SetSpriteAnimation(projectile.sprite, 3, 3, 2) // TODO: Pass a tileset instead
   SetSpritePosition(projectile.sprite, position.x, position.y)
   SetSpriteGroup(projectile.sprite, manager.group)
-  SetSpritePhysicsOn(projectile.sprite, 3)
-  SetSpriteCollideBits(projectile.sprite, PHYSICS_PROJECTILE_COLLISION_BITS)
+  SetSpritePhysicsOn(projectile.sprite, 2)
+  SetSpriteCollideBits(projectile.sprite, manager.collideBits)
   PlaySprite(projectile.sprite, 10)
+  SetSpritePhysicsImpulse(projectile.sprite, GetSpriteXByOffset(projectile.sprite), GetSpriteYByOffset(projectile.sprite), direction.x * manager.speed, direction.y * manager.speed)
   manager.projectiles.insert(projectile)
 endfunction
 
@@ -42,7 +47,7 @@ function ProjectileManager_Update(manager ref as tProjectileManager, delta#)
       direction as tVector
       direction = manager.projectiles[i].direction
       // SetSpritePosition(manager.projectiles[i].sprite, x# + ENEMY_PROJECTILE_SPEED * direction.x, y# + ENEMY_PROJECTILE_SPEED * direction.y)
-      SetSpritePhysicsVelocity(manager.projectiles[i].sprite, direction.x * 100, direction.y * 100)
+      // SetSpritePhysicsVelocity(manager.projectiles[i].sprite, direction.x * 100, direction.y * 100)
     endif
   next i
 endfunction

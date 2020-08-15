@@ -22,7 +22,7 @@ endfunction manager
 function SceneManager_CreateCurrent(manager ref as tSceneManager)
   select manager.current
     case SCENES_GAME_SCENE
-      manager.gameScene = GameScene_Create(1)
+      manager.gameScene = GameScene_Create(INITIAL_LEVEL)
     endcase
     case SCENES_MAIN_MENU_SCENE
       manager.mainMenuScene = MainMenuScene_Create()

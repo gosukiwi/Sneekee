@@ -6,8 +6,9 @@
 #constant SPRITE_ENEMY_GROUP            4
 #constant SPRITE_ENEMY_PROJECTILE_GROUP 5
 #constant SPRITE_ENEMY_SCAN             6
-// Debugging flag
+// Debugging
 #constant DEBUGGING 0
+#constant INITIAL_LEVEL 1
 // Depth
 #constant DEPTH_FRONT        0
 #constant DEPTH_FRONT_MIDDLE 250

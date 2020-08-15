@@ -44,7 +44,7 @@ function Enemy_Create(x, y)
 
   enemy.sprite = sprite
   enemy.scan = scan
-  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP)
+  enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, 50, PHYSICS_PROJECTILE_COLLISION_BITS)
   enemy.timer = Timer()
   enemy.alive = 1
   Enemy_MovingLeftState_Initialize(enemy)
@@ -194,8 +194,6 @@ function Enemy_AttackingState_Tick(enemy ref as tEnemy, player ref as tPlayer)
 endfunction
 
 function Enemy_Fire(enemy ref as tEnemy, player ref as tPlayer)
-  if DEBUGGING then exitfunction
-
   if enemy.fireTimer = 0 or Timer() - enemy.fireTimer > ENEMY_FIRE_DELAY
     position as tVector
     endpoint as tVector
