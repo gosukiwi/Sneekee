@@ -9,6 +9,9 @@
 #constant ENEMY_FIRE_DELAY           0.5
 #constant ENEMY_PROJECTILE_SPEED     1
 #constant ENEMY_PROJECTILE_LIFESPAN  5 // seconds
+#constant ENEMY_DROPS_NOTHING        0
+#constant ENEMY_DROPS_LIFE           1
+#constant ENEMY_DROPS_SHURIKEN       2
 
 type tEnemy
   sprite as integer
@@ -18,12 +21,13 @@ type tEnemy
   timer as float
   fireTimer as float
   projectileManager as tProjectileManager
-  CollectableManager as tCollectableManager
+  livesManager as tCollectableManager
+  shurikenManager as tCollectableManager
   alive as integer
-  dropsLife as integer
+  drop as integer
 endtype
 
-function Enemy_Create(x, y, dropsLife)
+function Enemy_Create(x, y, drop)
   enemy as tEnemy
   image = LoadImage("images/enemy.png")
 	SetImageMagFilter(image, 0) // These two instuctions make it so
@@ -61,10 +65,11 @@ function Enemy_Create(x, y, dropsLife)
   enemy.scan = scan
   enemy.scanDown = scanDown
   enemy.projectileManager = ProjectileManager_Create(LoadImage("images/projectile.png"), SPRITE_ENEMY_PROJECTILE_GROUP, PHYSICS_PROJECTILE_COLLISION_BITS, ENEMY_PROJECTILE_LIFESPAN)
-  enemy.CollectableManager = CollectableManager_Create(SPRITE_LIVES_GROUP)
+  enemy.livesManager = CollectableManager_Create(LoadImage("images/heart-small.png"), SPRITE_LIVES_GROUP)
+  enemy.shurikenManager = CollectableManager_Create(LoadImage("images/shuriken.png"), SPRITE_SHURIKEN_COLLECTABLE_GROUP)
   enemy.timer = Timer()
   enemy.alive = 1
-  enemy.dropsLife = dropsLife
+  enemy.drop = drop
   Enemy_MovingLeftState_Initialize(enemy)
 endfunction enemy
 
@@ -99,6 +104,7 @@ function Enemy_Update(enemy ref as tEnemy, player ref as tPlayer, delta#)
         Enemy_AttackingState_Initialize(enemy)
       elseif group = SPRITE_SHURIKEN_GROUP and GetSpriteVisible(other)
         PlaySound(SoundManager_Get(g.soundManager, "shuriken-hit"), 10)
+        SetSpriteVisible(other, 0)
         Enemy_Destroy(enemy, 0)
         exitfunction
       endif
@@ -124,10 +130,13 @@ endfunction
 
 function Enemy_Destroy(enemy ref as tEnemy, silent as integer)
   enemy.alive = 0
-  if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"), SOUND_VOLUME)
   ProjectileManager_Destroy(enemy.projectileManager)
   ExplosionManager_AddAtSprite(g.explosionManager, enemy.sprite)
-  if enemy.dropsLife then CollectableManager_Add(enemy.CollectableManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+
+  if silent = 0 then PlaySound(SoundManager_Get(g.soundManager, "explosion"), SOUND_VOLUME)
+  if enemy.drop = ENEMY_DROPS_LIFE then CollectableManager_Add(enemy.livesManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+  if enemy.drop = ENEMY_DROPS_SHURIKEN then CollectableManager_Add(enemy.shurikenManager, GetSpriteX(enemy.sprite), GetSpriteY(enemy.sprite))
+
   DeleteSprite(enemy.sprite)
   DeleteSprite(enemy.scan)
   DeleteSprite(enemy.scanDown)

@@ -22,7 +22,6 @@ type tPlayer
   rocks as tProjectileManager
   rockPlacedAt as integer
   shuriken as tShuriken
-  hasShuriken as integer
 endtype
 
 function Player_Create(x, y)
@@ -58,7 +57,6 @@ function Player_Create(x, y)
   player.categoryBits = PHYSICS_PLAYER_CATEGORY
   player.blinkTween = BlinkTween_Create(player.sprite)
   player.shuriken = Shuriken_Create()
-  player.hasShuriken = 1
   player.rocks = ProjectileManager_Create(LoadImage("images/rock.png"), SPRITE_PLAYER_ROCK, PHYSICS_PLAYER_ROCK_COLLISION_BITS, 5)
   player.rockPlacedAt = -PLAYER_ROCK_ALIVE_TIME
 endfunction player
@@ -75,11 +73,6 @@ function Player_Update(player ref as tPlayer, delta#)
       endif
     until GetSpriteNextContact() = 0
   endif
-
-  // if GetSpriteCollision(player.sprite, player.shuriken.sprite) and Shuriken_IsStill(player.shuriken) and player.hasShuriken = 0
-  //   Player_PickUpShuriken(player)
-  //   PlaySound(SoundManager_Get(g.soundManager, "shuriken-grabbed"), SOUND_VOLUME)
-  // endif
 
   // Input
   Player_HandleInput(player)
@@ -205,9 +198,4 @@ function Player_ThrowShuriken(player ref as tPlayer)
   position = Vector_Create(GetSpriteX(player.sprite) + 6, GetSpriteY(player.sprite))
   direction = Vector_Normalize(Vector_SetInitialPoint(Vector_Create(ScreenToWorldX(GetRawMouseX()), ScreenToWorldY(GetRawMouseY())), position))
   Shuriken_ThrowFrom(player.shuriken, position, direction)
-endfunction
-
-function Player_PickUpShuriken(player ref as tPlayer)
-  SetSpriteVisible(player.shuriken.sprite, 0)
-  player.hasShuriken = 1
 endfunction

@@ -59,6 +59,7 @@ function GameScene_Destroy(scene ref as tGameScene)
   Player_Destroy(scene.player)
   Map_Destroy(scene.map)
   HeartsHud_Destroy(scene.hud)
+  ShurikensHud_Destroy(scene.shurihud)
   DeleteSprite(scene.button)
   DeleteSprite(scene.background)
   SetViewOffset(0, 0)
@@ -78,15 +79,15 @@ function GameScene_CreateLevel1()
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
-  scene.shurihud = ShurikensHud_Create(1)
+  scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 29)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(125, 106, 0))
-  scene.enemies.insert(Enemy_Create(75, 66, 0))
-  scene.enemies.insert(Enemy_Create(50, 30, 0))
-  scene.enemies.insert(Enemy_Create(125, 30, 1))
+  scene.enemies.insert(Enemy_Create(125, 106, ENEMY_DROPS_SHURIKEN))
+  scene.enemies.insert(Enemy_Create(75, 66, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(50, 30, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(125, 30, ENEMY_DROPS_LIFE))
 endfunction scene
 
 function GameScene_CreateLevel2()
@@ -95,13 +96,14 @@ function GameScene_CreateLevel2()
   scene.player = Player_Create(140, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
+  scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 37)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(25, 106, 0))
-  scene.enemies.insert(Enemy_Create(96, 72, 1))
-  scene.enemies.insert(Enemy_Create(72, 40, 0))
+  scene.enemies.insert(Enemy_Create(25, 106, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(96, 72, ENEMY_DROPS_LIFE))
+  scene.enemies.insert(Enemy_Create(72, 40, ENEMY_DROPS_SHURIKEN))
 endfunction scene
 
 function GameScene_CreateLevel3()
@@ -110,14 +112,15 @@ function GameScene_CreateLevel3()
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
+  scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(9, 37)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(112, 104, 0))
-  scene.enemies.insert(Enemy_Create(105, 72, 1))
-  scene.enemies.insert(Enemy_Create(25, 72, 0))
-  scene.enemies.insert(Enemy_Create(120, 32, 0))
+  scene.enemies.insert(Enemy_Create(112, 104, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(105, 72, ENEMY_DROPS_LIFE))
+  scene.enemies.insert(Enemy_Create(25, 72, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(120, 32, ENEMY_DROPS_NOTHING))
 endfunction scene
 
 function GameScene_CreateLevel4()
@@ -126,14 +129,15 @@ function GameScene_CreateLevel4()
   scene.player = Player_Create(9, Map_GetHeight(scene.map) - 10)
   scene.background = GameScene_CreateBackground("images/bg-1.png", scene.map)
   scene.hud = HeartsHud_Create(g.lives)
+  scene.shurihud = ShurikensHud_Create(g.shurikens)
   scene.button = GameScene_CreateNextLevelButton(145, 13)
   scene.music = GameScene_CreateMusic("music/ingame.ogg")
   scene.alarm = 0
   scene.alarmPlaying = 0
-  scene.enemies.insert(Enemy_Create(80, 104, 0))
-  scene.enemies.insert(Enemy_Create(88, 72, 1))
-  scene.enemies.insert(Enemy_Create(108, 40, 0))
-  scene.enemies.insert(Enemy_Create(128, 8, 0))
+  scene.enemies.insert(Enemy_Create(80, 104, ENEMY_DROPS_SHURIKEN))
+  scene.enemies.insert(Enemy_Create(88, 72, ENEMY_DROPS_LIFE))
+  scene.enemies.insert(Enemy_Create(108, 40, ENEMY_DROPS_NOTHING))
+  scene.enemies.insert(Enemy_Create(128, 8, ENEMY_DROPS_NOTHING))
 endfunction scene
 // =============================================================================
 
@@ -227,6 +231,11 @@ function GameScene_CheckPhysicsCollisions(scene ref as tGameScene)
         DeleteSprite(other)
         g.lives = g.lives + 1
         HeartsHud_Push(scene.hud)
+        PlaySound(SoundManager_Get(g.soundManager, "lifeup"), SOUND_VOLUME)
+      elseif group = SPRITE_SHURIKEN_COLLECTABLE_GROUP
+        DeleteSprite(other)
+        g.shurikens = g.shurikens + 1
+        ShurikensHud_Push(scene.shurihud)
         PlaySound(SoundManager_Get(g.soundManager, "lifeup"), SOUND_VOLUME)
       endif
     until GetSpriteNextContact() = 0

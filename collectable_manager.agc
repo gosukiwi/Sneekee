@@ -3,16 +3,16 @@
 type tCollectableManager
   image as integer
   group as integer
-  lives as integer[]
+  collectables as integer[]
 endtype
 
-function CollectableManager_Create(group as integer)
-  life as tCollectableManager
-  life.image = LoadImage("images/heart-small.png")
-  life.group = group
-	SetImageMagFilter(life.image, 0) // These two instuctions make it so
-	SetImageMinFilter(life.image, 0) // resizing is pixel-perfect!
-endfunction life
+function CollectableManager_Create(image as integer, group as integer)
+  manager as tCollectableManager
+  manager.image = image
+  manager.group = group
+	SetImageMagFilter(manager.image, 0) // These two instuctions make it so
+	SetImageMinFilter(manager.image, 0) // resizing is pixel-perfect!
+endfunction manager
 
 function CollectableManager_Add(manager ref as tCollectableManager, x as integer, y as integer)
   sprite = CreateSprite(manager.image)
@@ -20,5 +20,5 @@ function CollectableManager_Add(manager ref as tCollectableManager, x as integer
   SetSpriteGroup(sprite, manager.group)
   SetSpritePhysicsOn(sprite, 2)
   SetSpritePhysicsImpulse(sprite, GetSpriteXByOffset(sprite), GetSpriteYByOffset(sprite), 0, -LIFE_IMPULSE)
-  manager.lives.insert(sprite)
+  manager.collectables.insert(sprite)
 endfunction

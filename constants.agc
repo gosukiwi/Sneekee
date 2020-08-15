@@ -9,6 +9,8 @@
 #constant SPRITE_LIVES_GROUP             6
 #constant SPRITE_PLAYER_ROCK             7
 #constant SPRITE_SHURIKEN_GROUP          8
+#constant SPRITE_SHURIKEN_COLLECTABLE_GROUP 9
+
 #constant PHYSICS_PLAYER_CATEGORY %10
 #constant PHYSICS_PROJECTILE_COLLISION_BITS  %10 // collides with player only
 #constant PHYSICS_PLAYER_ROCK_COLLISION_BITS %11 // collides with player and everything else

@@ -8,7 +8,7 @@ endtype
 function ShurikensHud_Push(hud ref as tShurikensHud)
   sprite = CreateSprite(hud.image)
   FixSpriteToScreen(sprite, 1)
-  SetSpritePosition(sprite, 64 - GetSpriteWidth(sprite) - 1 + (GetImageWidth(hud.image) + SHURIKEN_HUD_PADDING) * (hud.shurikens.length + 1), 1)
+  SetSpritePosition(sprite, 64 - GetSpriteWidth(sprite) - 1 - (GetImageWidth(hud.image) + SHURIKEN_HUD_PADDING) * (hud.shurikens.length + 1), 1)
   SetSpriteDepth(sprite, DEPTH_FRONT)
   hud.shurikens.insert(sprite)
 endfunction
